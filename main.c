@@ -6,22 +6,36 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 12:42:08 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/27 13:04:34 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <unistd.h> // Include the <fcntl.h> header file
+#include <unistd.h>
 #include "libft/libft.h"
 
+int find_char(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
 char *find_path(char *command, char *envp)
 {
 		char **paths = ft_split(envp, ':');
 		int	i;
 
 		i = 0;
+		command = ft_substr(command, 0, find_char(command, ' '));
 		while (paths[i])
 		{
 			paths[i] = ft_strjoin(paths[i], "/");
@@ -43,7 +57,6 @@ char *get_env(char *envp[])
 {
 	while(*envp != NULL)
 	{
-		
 		if (ft_strncmp(*envp, "PATH", 4) == 0)
 		{
 			return (ft_substr(*envp, 6, ft_strlen(*envp) - 6));
@@ -64,7 +77,8 @@ int main(int argc, char const *argv[], char *envp[])
 			pid = fork();
 			if (pid == 0)
 			{
-				if (execve(path, (char *const *)argv, NULL) == -1)
+				ft_printf("%s\n", argv[0]);
+				if (execve(path, (char *const *)&argv[0], NULL) == -1)
 					perror("COMMAND");
 				exit(0);
 			}
