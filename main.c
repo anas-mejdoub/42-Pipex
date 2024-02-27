@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 16:44:49 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:47:58 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int main(int argc, char const *argv[], char *envp[])
 		char *path;
 
 		char **command_args = ft_split(argv[1], ' ');
+		if (!command_args)
+			return 0;
 		path = find_path(command_args[0], get_env(envp));
 		if (path != NULL)
 		{
