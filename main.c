@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 11:46:24 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/27 12:42:08 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,21 @@ int main(int argc, char const *argv[], char *envp[])
 		{
 			pid_t pid;
 			pid = fork();
-		    if (execve(path, (char *const *)argv, NULL) == -1)
-				perror("COMMAND");
+			if (pid == 0)
+			{
+				if (execve(path, (char *const *)argv, NULL) == -1)
+					perror("COMMAND");
+				exit(0);
+			}
+			else
+			{
+				int status;
+				wait(&status);
+			}
 		}
 		else
 		{
 			perror("COMMAND NOT FOUND !");
 		}
-		system("leaks a.out");
 	return 0;
 }
