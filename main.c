@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 16:47:58 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/27 19:16:17 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,14 @@ char *get_env(char *envp[])
 int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
-
+		// int fd[2];
+		
 		char **command_args = ft_split(argv[1], ' ');
+		// if (pipe(fd) == -1)
+		// 	perror("pipe");
+		
 		if (!command_args)
-			return 0;
+			return 2;
 		path = find_path(command_args[0], get_env(envp));
 		if (path != NULL)
 		{
@@ -78,6 +82,7 @@ int main(int argc, char const *argv[], char *envp[])
 			pid = fork();
 			if (pid == 0)
 			{
+				// dup2()
 				if (execve(path, (char *const *)command_args, envp) == -1)
 					perror("COMMAND");
 				exit(0);
@@ -85,7 +90,7 @@ int main(int argc, char const *argv[], char *envp[])
 			else
 			{
 				int status;
-				wait(&status);      
+				wait(&status);
 			}
 		}
 		else
