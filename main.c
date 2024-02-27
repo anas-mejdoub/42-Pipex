@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 15:37:35 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:44:49 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
 
-		// argv +=1;
 		char **command_args = ft_split(argv[1], ' ');
 		path = find_path(command_args[0], get_env(envp));
 		if (path != NULL)
@@ -77,7 +76,6 @@ int main(int argc, char const *argv[], char *envp[])
 			pid = fork();
 			if (pid == 0)
 			{
-				ft_printf("%s\n", argv[1]);
 				if (execve(path, (char *const *)command_args, envp) == -1)
 					perror("COMMAND");
 				exit(0);
@@ -85,12 +83,10 @@ int main(int argc, char const *argv[], char *envp[])
 			else
 			{
 				int status;
-				wait(&status);
+				wait(&status);      
 			}
 		}
 		else
-		{
 			perror("COMMAND NOT FOUND !");
-		}
 	return 0;
 }
