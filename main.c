@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 13:04:34 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/27 15:37:35 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char *find_path(char *command, char *envp)
 		int	i;
 
 		i = 0;
-		command = ft_substr(command, 0, find_char(command, ' '));
 		while (paths[i])
 		{
 			paths[i] = ft_strjoin(paths[i], "/");
@@ -69,16 +68,17 @@ int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
 
-		argv +=1;
-		path = find_path((char *)argv[0], get_env(envp));
+		// argv +=1;
+		char **command_args = ft_split(argv[1], ' ');
+		path = find_path(command_args[0], get_env(envp));
 		if (path != NULL)
 		{
 			pid_t pid;
 			pid = fork();
 			if (pid == 0)
 			{
-				ft_printf("%s\n", argv[0]);
-				if (execve(path, (char *const *)&argv[0], NULL) == -1)
+				ft_printf("%s\n", argv[1]);
+				if (execve(path, (char *const *)command_args, envp) == -1)
 					perror("COMMAND");
 				exit(0);
 			}
