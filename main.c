@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/28 14:21:04 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:31:22 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,8 @@ int main(int argc, char const *argv[], char *envp[])
 			if (pid == 0)
 			{
 				dup2(fd[1], STDOUT_FILENO);
-				// close(fd[1]);
 				close(fd[0]);
-				if (execve(path, (char *const *)command_args, envp) == -1)
+				if (execve(path, command_args, envp) == -1)
 					perror("COMMAND");
 				exit(0);
 			}
@@ -93,11 +92,12 @@ int main(int argc, char const *argv[], char *envp[])
 			{
 				
 				int status;
-				char *args[] = {"/usr/bin/wc", "-l", NULL};
 				wait(&status);
 				dup2(fd[0], STDIN_FILENO);
 				close(fd[1]);
-				if (execve("/usr/bin/wc", (char *const *)args, envp) == -1)
+				command_args = ft_split(argv[2], ' ');
+				path = find_path(command_args[0], get_env(envp));
+				if (execve(path, (char *const *)command_args, envp) == -1)
 					perror("COMMAND");
 			}
 		}
