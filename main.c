@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/28 18:08:24 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:29:40 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,14 @@ int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
 		int fd[2];
-		
+		int fdin;
+		int fdout;
 		char **command_args = ft_split(argv[2], ' ');
-		if (pipe(fd) == -1)
-			perror("pipe");
-		int fdin = open(argv[1], O_RDWR);
-		char buffer[5];
-		int fdout = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0644);
+
+		fdout = open(argv[4], O_RDWR | O_TRUNC);
+		fdin = open(argv[1], O_RDWR);
+		if (fdout == -1 || fdin == -1 || pipe(fd) == -1)
+			perror("open");
 		if (!command_args)
 			return (2);
 		path = find_path(command_args[0], get_env(envp));
