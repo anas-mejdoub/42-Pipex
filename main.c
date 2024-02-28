@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/28 19:38:58 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:50:27 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int find_char(char *str, char c)
 }
 int checker_(char *command, char *paths)
 {
-	return (command[0] == '.' || command[0] == '/');
+	return (command[0] == '/');
 }
 char *find_path(char *command, char *envp)
 {
