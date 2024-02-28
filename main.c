@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/28 17:31:22 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:00:39 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,12 @@ int main(int argc, char const *argv[], char *envp[])
 		char *path;
 		int fd[2];
 		
-		char **command_args = ft_split(argv[1], ' ');
+		char **command_args = ft_split(argv[2], ' ');
 		if (pipe(fd) == -1)
 			perror("pipe");
-		
+		int fdin = open("in", O_RDWR);
+		char buffer[5];
+		int fdout = open("out", O_RDWR | O_CREAT | O_TRUNC, 0644);
 		if (!command_args)
 			return 2;
 		path = find_path(command_args[0], get_env(envp));
@@ -82,8 +84,11 @@ int main(int argc, char const *argv[], char *envp[])
 			pid = fork();
 			if (pid == 0)
 			{
+				dup2(fdin, STDIN_FILENO);
+				close(fdin);
 				dup2(fd[1], STDOUT_FILENO);
 				close(fd[0]);
+				close(fd[1]);
 				if (execve(path, command_args, envp) == -1)
 					perror("COMMAND");
 				exit(0);
@@ -93,9 +98,12 @@ int main(int argc, char const *argv[], char *envp[])
 				
 				int status;
 				wait(&status);
+				dup2(fdout, STDOUT_FILENO);
+				close(fdout);
 				dup2(fd[0], STDIN_FILENO);
 				close(fd[1]);
-				command_args = ft_split(argv[2], ' ');
+				// ft_printf("%s\n", argv[3]);
+				command_args = ft_split(argv[3], ' ');
 				path = find_path(command_args[0], get_env(envp));
 				if (execve(path, (char *const *)command_args, envp) == -1)
 					perror("COMMAND");
