@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/02/27 19:16:17 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:21:04 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ char *get_env(char *envp[])
 int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
-		// int fd[2];
+		int fd[2];
 		
 		char **command_args = ft_split(argv[1], ' ');
-		// if (pipe(fd) == -1)
-		// 	perror("pipe");
+		if (pipe(fd) == -1)
+			perror("pipe");
 		
 		if (!command_args)
 			return 2;
@@ -82,15 +82,23 @@ int main(int argc, char const *argv[], char *envp[])
 			pid = fork();
 			if (pid == 0)
 			{
-				// dup2()
+				dup2(fd[1], STDOUT_FILENO);
+				// close(fd[1]);
+				close(fd[0]);
 				if (execve(path, (char *const *)command_args, envp) == -1)
 					perror("COMMAND");
 				exit(0);
 			}
-			else
+			else if (pid > 0)
 			{
+				
 				int status;
+				char *args[] = {"/usr/bin/wc", "-l", NULL};
 				wait(&status);
+				dup2(fd[0], STDIN_FILENO);
+				close(fd[1]);
+				if (execve("/usr/bin/wc", (char *const *)args, envp) == -1)
+					perror("COMMAND");
 			}
 		}
 		else
