@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 15:20:34 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:28:43 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,12 @@ char *get_env(char *envp[])
 int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
-		int fd[1000][argc - 3];
+		int fd[argc - 3][2];
 		int fdin;
 		int fdout;
 		char **command_args = ft_split(argv[2], ' ');
 		int i;
-		int flag;
 		
-		flag = 0;
 		i = 2;
 		if (argc >= 5)
 		{
