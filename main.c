@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 18:26:09 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 20:27:59 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,22 @@ int main(int argc, char const *argv[], char *envp[])
 						dup2(fd[i - 3][0], STDIN_FILENO);
 						dup2(fd[i - 2][1], STDOUT_FILENO);
 						if (execve(path, command_args, envp) == -1)
-								return (exit_error("COMMAND2", 127));
+						{
+							perror("COMMAND2");
+							exit(127);
+							// return (exit_error("COMMAND2", 127));
+						}
 					}			
-					exit(0);
+					exit(77);
 				}
 				else if (pid > 0 && i >= argc - 2)
 				{
-					int k = waitpid(pid, &status, 0);
+					waitpid(pid, &status, 0);
+					ft_printf("status: %d\n", WEXITSTATUS(status));
 					if (WEXITSTATUS(status) != 0)
+					{
 						return (exit_error("COMMAND3", 127));
+					}
 					dup2(fd[i - 3][0], STDIN_FILENO);
 					dup2(fdout, STDOUT_FILENO);
 					if (execve(path, command_args, envp) == -1)
