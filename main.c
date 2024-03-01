@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 16:28:43 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:34:34 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char *get_env(char *envp[])
 	}
 	return (NULL);
 }
+
 int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
