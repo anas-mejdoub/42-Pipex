@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 17:25:06 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:26:09 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,48 +94,47 @@ int main(int argc, char const *argv[], char *envp[])
 			fdin = open(argv[1], O_RDWR);
 			if (fdout == -1 || fdin == -1)
 				return(exit_error("FILE", 1));
-				// return(exit_error(1));
 			while (i < argc - 1)
 			{
 				int j = pipe(fd[i - 2]);
-					pid_t pid;
-					command_args = ft_split(argv[i], ' ');
-					path = find_path(command_args[0], get_env(envp));
-					if (path == NULL)
-						perror("COMMAND NOT FOUND !");
-					pid = fork();
-					if (pid == -1 || j == -1)
-						perror("FORK");
-					if (pid == 0)
+				pid_t pid;
+				command_args = ft_split(argv[i], ' ');
+				path = find_path(command_args[0], get_env(envp));
+				pid = fork();
+				if (pid == -1 || j == -1)
+					perror("FORK");
+				if (pid == 0)
+				{
+					if (i == 2)
 					{
-						if (i == 2)
-						{
-							dup2(fdin, STDIN_FILENO);
-							dup2(fd[i - 2][1], STDOUT_FILENO);
-							if (execve(path, command_args, envp) == -1)
-								perror("COMMAND");
-						}
-						else if (i < argc - 2)
-						{
-							dup2(fd[i - 3][0], STDIN_FILENO);
-							dup2(fd[i - 2][1], STDOUT_FILENO);
-							if (execve(path, command_args, envp) == -1)
-								perror("COMMAND!");
-						}
-						exit(0);
-					}
-					else if (pid > 0 && i >= argc - 2)
-					{
-						wait(&status);
-						dup2(fdout, STDOUT_FILENO);
-						dup2(fd[i - 3][0], STDIN_FILENO);
+						dup2(fdin, STDIN_FILENO);
+						dup2(fd[i - 2][1], STDOUT_FILENO);
 						if (execve(path, command_args, envp) == -1)
-							perror("COMMAND");
+							return (exit_error("COMMAND1", 127));
 					}
+					else if (i < argc - 2)
+					{
+						dup2(fd[i - 3][0], STDIN_FILENO);
+						dup2(fd[i - 2][1], STDOUT_FILENO);
+						if (execve(path, command_args, envp) == -1)
+								return (exit_error("COMMAND2", 127));
+					}			
+					exit(0);
+				}
+				else if (pid > 0 && i >= argc - 2)
+				{
+					int k = waitpid(pid, &status, 0);
+					if (WEXITSTATUS(status) != 0)
+						return (exit_error("COMMAND3", 127));
+					dup2(fd[i - 3][0], STDIN_FILENO);
+					dup2(fdout, STDOUT_FILENO);
+					if (execve(path, command_args, envp) == -1)
+						return (exit_error("COMMAND", 127));
+				}
 				
 				close(fd[i - 2][1]);
 				i++;
 			}
 		}
-	return 0;
+	return (0);
 }
