@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 16:41:41 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:25:06 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "libft/libft.h"
+#include <errno.h>
 
 int find_char(char *str, char c)
 {
@@ -58,7 +59,11 @@ char *find_path(char *command, char *envp)
 		}
 		return (NULL);
 }
-
+int exit_error(char *str, int n)
+{
+	perror(str);
+	return (n);
+}
 char *get_env(char *envp[])
 {
 	while(*envp != NULL)
@@ -88,9 +93,8 @@ int main(int argc, char const *argv[], char *envp[])
 			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC);
 			fdin = open(argv[1], O_RDWR);
 			if (fdout == -1 || fdin == -1)
-				perror("open");
-			if (!command_args)
-				return (2);
+				return(exit_error("FILE", 1));
+				// return(exit_error(1));
 			while (i < argc - 1)
 			{
 				int j = pipe(fd[i - 2]);
