@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 13:31:15 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:56:43 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int main(int argc, char const *argv[], char *envp[])
 		char **command_args = ft_split(argv[2], ' ');
 		int i;
 		int flag;
-		static int savedfd;
 		
 		flag = 0;
 		i = 2;
@@ -88,7 +87,6 @@ int main(int argc, char const *argv[], char *envp[])
 		{
 			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC);
 			fdin = open(argv[1], O_RDWR);
-			
 			if (fdout == -1 || fdin == -1)
 				perror("open");
 			if (!command_args)
@@ -100,6 +98,8 @@ int main(int argc, char const *argv[], char *envp[])
 				if (path != NULL)
 				{
 					pid_t pid;
+					command_args = ft_split(argv[i], ' ');
+					path = find_path(command_args[0], get_env(envp));
 					pid = fork();
 					if (pid == -1 || j == -1)
 						perror("FORK");
@@ -107,20 +107,15 @@ int main(int argc, char const *argv[], char *envp[])
 					{
 						if (i == 2)
 						{
-							command_args = ft_split(argv[i], ' ');
-							path = find_path(command_args[0], get_env(envp));
 							dup2(fdin, STDIN_FILENO);
 							dup2(fd[i - 2][1], STDOUT_FILENO);
-
 							if (execve(path, command_args, envp) == -1)
 								perror("COMMAND");
 						}
 						else if (i < argc - 2)
 						{
-							command_args = ft_split(argv[i], ' ');
 							dup2(fd[i - 3][0], STDIN_FILENO);
 							dup2(fd[i - 2][1], STDOUT_FILENO);
-							path = find_path(command_args[0], get_env(envp));
 							if (execve(path, command_args, envp) == -1)
 								perror("COMMAND!");
 						}
@@ -130,17 +125,15 @@ int main(int argc, char const *argv[], char *envp[])
 					{
 						int status;
 						wait(&status);
-						command_args = ft_split(argv[i], ' ');
 						dup2(fdout, STDOUT_FILENO);
 						dup2(fd[i - 3][0], STDIN_FILENO);
-						path = find_path(command_args[0], get_env(envp));
 						if (execve(path, command_args, envp) == -1)
 							perror("COMMAND");
 					}
 				}
 				else
 					perror("COMMAND NOT FOUND !");
-					close(fd[i - 2][1]);
+				close(fd[i - 2][1]);
 				i++;
 			}
 		}
