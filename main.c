@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 13:23:59 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 13:31:15 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ int main(int argc, char const *argv[], char *envp[])
 							command_args = ft_split(argv[i], ' ');
 							path = find_path(command_args[0], get_env(envp));
 							dup2(fdin, STDIN_FILENO);
-							// close(fdin);
 							dup2(fd[i - 2][1], STDOUT_FILENO);
 
 							if (execve(path, command_args, envp) == -1)
@@ -123,7 +122,7 @@ int main(int argc, char const *argv[], char *envp[])
 							dup2(fd[i - 2][1], STDOUT_FILENO);
 							path = find_path(command_args[0], get_env(envp));
 							if (execve(path, command_args, envp) == -1)
-								perror("COMMAND");
+								perror("COMMAND!");
 						}
 						exit(0);
 					}
