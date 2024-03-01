@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 16:34:34 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:41:41 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,9 @@ int main(int argc, char const *argv[], char *envp[])
 		int fd[argc - 3][2];
 		int fdin;
 		int fdout;
-		char **command_args = ft_split(argv[2], ' ');
+		char **command_args;
 		int i;
+		int status;
 		
 		i = 2;
 		if (argc >= 5)
@@ -93,12 +94,11 @@ int main(int argc, char const *argv[], char *envp[])
 			while (i < argc - 1)
 			{
 				int j = pipe(fd[i - 2]);
-				path = find_path(command_args[0], get_env(envp));
-				if (path != NULL)
-				{
 					pid_t pid;
 					command_args = ft_split(argv[i], ' ');
 					path = find_path(command_args[0], get_env(envp));
+					if (path == NULL)
+						perror("COMMAND NOT FOUND !");
 					pid = fork();
 					if (pid == -1 || j == -1)
 						perror("FORK");
@@ -122,16 +122,13 @@ int main(int argc, char const *argv[], char *envp[])
 					}
 					else if (pid > 0 && i >= argc - 2)
 					{
-						int status;
 						wait(&status);
 						dup2(fdout, STDOUT_FILENO);
 						dup2(fd[i - 3][0], STDIN_FILENO);
 						if (execve(path, command_args, envp) == -1)
 							perror("COMMAND");
 					}
-				}
-				else
-					perror("COMMAND NOT FOUND !");
+				
 				close(fd[i - 2][1]);
 				i++;
 			}
