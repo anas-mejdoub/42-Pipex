@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/01 20:36:27 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:45:14 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int main(int argc, char const *argv[], char *envp[])
 					waitpid(pid, &status, 0);
 					if (WEXITSTATUS(status) != 0)
 					{
-						return (exit_error("COMMAND3", 127));
+						exit(127);
 					}
 				}
 				close(fd[i - 2][1]);
