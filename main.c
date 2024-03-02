@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/02 18:26:30 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/02 20:38:04 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,6 @@ int main(int argc, char const *argv[], char *envp[])
 				i++;
 			}
 		}
-		
+		system("leaks a.out");
 	return (0);
 }
