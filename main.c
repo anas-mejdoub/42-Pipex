@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/02 16:45:14 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/02 18:26:30 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,36 @@ int find_char(char *str, char c)
 	}
 	return (-1);
 }
+char **singleQuoteHandle(char *str)
+{
+	int		i;
+	char	**res;
+	int		j;
+    int temp;
+	
+	i = 0;
+    temp = 0;
+	j = 0;
+    res = malloc(1000 * sizeof(char *));
+	while (str[i])
+	{
+		if (str[i] == 39)
+		{
+			res[j] = ft_strtrim(ft_substr(str, temp, ft_strlen(str)), "\'");   
+            res[j + 1] = NULL;
+			return (res);
+		}
+		else if (str[i] == ' ')
+		{
+			res[j] = ft_substr(str, temp, i - temp);
+            j++;
+            temp = i + 1;
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 int checker_(char *command, char *paths)
 {
 	return (command[0] == '/');
@@ -76,7 +106,14 @@ char *get_env(char *envp[])
 	}
 	return (NULL);
 }
-
+char **optionSplit(char *str)
+{
+	if (strchr(str, 39))
+		return (singleQuoteHandle(str));
+	else
+		return (ft_split(str, ' '));
+	return (NULL);
+}
 int main(int argc, char const *argv[], char *envp[])
 {
 		char *path;
@@ -88,9 +125,9 @@ int main(int argc, char const *argv[], char *envp[])
 		int status;
 		
 		i = 2;
-		if (argc >= 5)
+		if (argc >= 4)
 		{
-			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC);
+			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			fdin = open(argv[1], O_RDWR);
 			if (fdout == -1 || fdin == -1)
 				return(exit_error("FILE", 1));
@@ -98,7 +135,7 @@ int main(int argc, char const *argv[], char *envp[])
 			{
 				int j = pipe(fd[i - 2]);
 				pid_t pid;
-				command_args = ft_split(argv[i], ' ');
+				command_args = optionSplit((char *)argv[i]);
 				path = find_path(command_args[0], get_env(envp));
 				pid = fork();
 				if (pid == -1 || j == -1)
@@ -122,7 +159,6 @@ int main(int argc, char const *argv[], char *envp[])
 					}
 					if (execve(path, command_args, envp) == -1)
 						{
-							perror("COMMAND3");
 							exit(127);
 						}
 				}
@@ -138,5 +174,6 @@ int main(int argc, char const *argv[], char *envp[])
 				i++;
 			}
 		}
+		
 	return (0);
 }
