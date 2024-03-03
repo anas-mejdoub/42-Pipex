@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 11:26:37 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 12:24:49 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int containsSingleQ(char *str)
 			count++;
 		i++;
 	}
+	printf("%d\n", count);
 	return (count);
 }
 char **singleQuoteHandle(char *str)
@@ -55,7 +56,7 @@ char **singleQuoteHandle(char *str)
 	i = 0;
     temp = 0;
 	j = 0;
-    res = malloc(1000 * sizeof(char *));
+    res = malloc(3 * sizeof(char *));
 	while (str[i])
 	{
 		if (str[i] == 39)
@@ -75,31 +76,48 @@ char **singleQuoteHandle(char *str)
 	return (NULL);
 }
 
-int checker_(char *command, char *paths)
+int checker_(char *command)
 {
 	return (command[0] == '/');
 }
+void free2d(char **res)
+{
+	int	i;
+
+	i = 0;
+	if (res != NULL)
+	{
+		while (res[i])
+		{
+			free(res[i]);
+			i++;
+		}
+		free(res);
+	}
+}
 char *find_path(char *command, char *envp)
 {
-		char **paths = ft_split(envp, ':');
-		int	i;
+		char	**paths;
+		int		i;
+		char	*res;
 
 		i = 0;
-		if (checker_(command, envp))
+		res = NULL;
+		paths = ft_split(envp, ':');
+		free(envp);
+		if (checker_(command))
 			return (command);
 		while (paths[i])
 		{
-			paths[i] = ft_strjoin(paths[i], "/");
-			
+			paths[i] = ft_strjoin2(paths[i], "/");
 			i++;
 		}
 		i = 0;
 		while(paths[i] != NULL)
 		{
-			if (access(ft_strjoin(paths[i], command), F_OK) == 0)
-			{
-				return (ft_strjoin(paths[i], command));
-			}
+			res = ft_strjoin(paths[i], command);
+			if (access(res, F_OK) == 0)
+				return (free2d(paths), res);
 			i++;
 		}
 		return (NULL);
@@ -114,16 +132,14 @@ char *get_env(char *envp[])
 	while(*envp != NULL)
 	{
 		if (ft_strncmp(*envp, "PATH", 4) == 0)
-		{
 			return (ft_substr(*envp, 6, ft_strlen(*envp) - 6));
-		}
 		envp++;
 	}
 	return (NULL);
 }
 char **optionSplit(char *str)
 {
-	if (containsSingleQ(str) > 1)
+	if (ft_strchr(str, 39))
 		return (singleQuoteHandle(str));
 	else
 		return (ft_split(str, ' '));
@@ -140,6 +156,8 @@ int main(int argc, char const *argv[], char *envp[])
 		int status;
 		
 		i = 2;
+		command_args = NULL;
+		path = NULL;
 		if (argc >= 4)
 		{
 			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
@@ -150,6 +168,8 @@ int main(int argc, char const *argv[], char *envp[])
 			{
 				int j = pipe(fd[i - 2]);
 				pid_t pid;
+				free2d(command_args);
+				free(path);
 				command_args = optionSplit((char *)argv[i]);
 				path = find_path(command_args[0], get_env(envp));
 				pid = fork();
@@ -173,9 +193,7 @@ int main(int argc, char const *argv[], char *envp[])
 						dup2(fdout, STDOUT_FILENO);
 					}
 					if (execve(path, command_args, envp) == -1)
-						{
-							exit(127);
-						}
+						exit(127);
 				}
 				else if (pid > 0 && i >= argc - 2)
 				{
@@ -189,6 +207,8 @@ int main(int argc, char const *argv[], char *envp[])
 				i++;
 			}
 		}
-		// system("leaks a.out");
+		free2d(command_args);
+		free(path);
+		system("leaks a.out");
 	return (0);
 }
