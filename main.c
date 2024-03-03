@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 12:59:26 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 13:08:15 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ char **singleQuoteHandle(char *str)
 	{
 		if (str[i] == 39)
 		{
-			res[j] = ft_strtrim(ft_substr(str, temp, ft_strlen(str)), "\'");   
+			res[j] = ft_strtrim(ft_substr2(str, temp, ft_strlen(str), 'f'), "\'");   
             res[j + 1] = NULL;
 			return (res);
 		}
 		else if (str[i] == ' ')
 		{
-			res[j] = ft_substr(str, temp, i - temp);
+			res[j] = ft_substr2(str, temp, i - temp, 'f');
             j++;
             temp = i + 1;
 		}
@@ -115,6 +115,7 @@ char *find_path(char *command, char *envp)
 		i = 0;
 		while(paths[i] != NULL)
 		{
+			free(res);
 			res = ft_strjoin(paths[i], command);
 			if (access(res, F_OK) == 0)
 				return (free2d(paths), res);
