@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 15:16:43 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:04:15 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,23 @@ char **singleQuoteHandle(char *str)
 	char	**res;
 	int		j;
     int temp;
-	
+
 	i = 0;
     temp = 0;
 	j = 0;
     res = malloc(3 * sizeof(char *));
+	if (!res)
+		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == 39)
 		{
-			res[j] = ft_strtrim(ft_substr2(str, temp, ft_strlen(str), 'f'), "\'");   
-            res[j + 1] = NULL;
-			return (res);
+			res[j] = ft_strtrim(ft_substr(str, temp, ft_strlen(str)), "\'");
+			return (res[j + 1] = NULL, res);
 		}
 		else if (str[i] == ' ')
 		{
-			res[j] = ft_substr2(str, temp, i - temp, 'f');
+			res[j] = ft_substr(str, temp, i - temp);
             j++;
             temp = i + 1;
 		}
@@ -207,9 +208,8 @@ int main(int argc, char const *argv[], char *envp[])
 				i++;
 			}
 		}
-		free2d(command_args);
-		free(path);
-		while (1);
-		// system("leaks a.out");
+		// free2d(command_args);
+		// free(path);
+		system("leaks a.out");
 	return (0);
 }
