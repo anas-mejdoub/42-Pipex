@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 18:04:03 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:53:11 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int containsSingleQ(char *str)
 			count++;
 		i++;
 	}
-	printf("%d\n", count);
 	return (count);
 }
 char **singleQuoteHandle(char *str)
@@ -173,7 +172,7 @@ char *get_env(char *envp[])
 }
 char **optionSplit(char *str)
 {
-	if (ft_strchr(str, 39))
+	if (containsSingleQ(str) > 1)
 		return (singleQuoteHandle(str));
 	else
 		return (ft_split(str, ' '));
