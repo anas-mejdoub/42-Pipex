@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/02 20:38:04 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 11:26:37 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,21 @@ int find_char(char *str, char c)
 		i++;
 	}
 	return (-1);
+}
+int containsSingleQ(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == 39)
+			count++;
+		i++;
+	}
+	return (count);
 }
 char **singleQuoteHandle(char *str)
 {
@@ -108,7 +123,7 @@ char *get_env(char *envp[])
 }
 char **optionSplit(char *str)
 {
-	if (strchr(str, 39))
+	if (containsSingleQ(str) > 1)
 		return (singleQuoteHandle(str));
 	else
 		return (ft_split(str, ' '));
@@ -174,6 +189,6 @@ int main(int argc, char const *argv[], char *envp[])
 				i++;
 			}
 		}
-		system("leaks a.out");
+		// system("leaks a.out");
 	return (0);
 }
