@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 13:08:15 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 13:32:41 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,11 @@ char *find_path(char *command, char *envp)
 		}
 		return (NULL);
 }
-int exit_error(char *str, int n)
+void	exit_error(char *str, int n, int i, int argc, char c)
 {
-	perror(str);
-	return (n);
+	if ((i >= argc - 2 && c == 'P') || (i < argc - 2))
+		perror(str);
+	exit(n);
 }
 char *get_env(char *envp[])
 {
@@ -164,7 +165,7 @@ int main(int argc, char const *argv[], char *envp[])
 			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			fdin = open(argv[1], O_RDWR);
 			if (fdout == -1 || fdin == -1)
-				return(exit_error("FILE", 1));
+				exit_error("FILE", 1, i, argc, 'P');
 			while (i < argc - 1)
 			{
 				int j = pipe(fd[i - 2]);
@@ -194,13 +195,13 @@ int main(int argc, char const *argv[], char *envp[])
 						dup2(fdout, STDOUT_FILENO);
 					}
 					if (execve(path, command_args, envp) == -1)
-						exit(127);
+						exit_error(command_args[0], 127, i, argc, 'C');
 				}
 				else if (pid > 0 && i >= argc - 2)
 				{
 					waitpid(pid, &status, 0);
 					if (WEXITSTATUS(status) != 0 && i >= argc - 2)
-						exit(127);
+						exit_error(command_args[0], 127, i, argc, 'P');
 				}
 				close(fd[i - 2][1]);
 				i++;
@@ -208,6 +209,6 @@ int main(int argc, char const *argv[], char *envp[])
 		}
 		free2d(command_args);
 		free(path);
-		system("leaks a.out");
+		// system("leaks a.out");
 	return (0);
 }
