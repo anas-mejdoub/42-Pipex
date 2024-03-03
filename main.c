@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 16:04:15 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:04:03 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,37 @@
 #include <unistd.h>
 #include "libft/libft.h"
 #include <errno.h>
+
+int count_word(char *str)
+{
+    int i;
+    int count;
+
+    count = 0;
+    i = 0;
+    while (str[i])
+    {
+        while (str[i] == ' ')
+            i++;
+        if (str[i] !=  ' ' && str[i])
+        {
+            count++;
+            if (str[i] == 39)
+            {
+                i++;
+                while (str[i] && str[i] != 39)
+                    i++;
+                i++;
+            }
+            else
+            {
+                while(str[i] !=  ' ' && str[i])
+                    i++;
+            }
+        }
+    }
+    return (count);
+}
 
 int find_char(char *str, char c)
 {
@@ -56,7 +87,7 @@ char **singleQuoteHandle(char *str)
 	i = 0;
     temp = 0;
 	j = 0;
-    res = malloc(3 * sizeof(char *));
+    res = malloc((count_word(str) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	while (str[i])
@@ -208,8 +239,5 @@ int main(int argc, char const *argv[], char *envp[])
 				i++;
 			}
 		}
-		// free2d(command_args);
-		// free(path);
-		system("leaks a.out");
 	return (0);
 }

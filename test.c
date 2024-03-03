@@ -34,18 +34,50 @@
 // 	}
 // 	return (NULL);
 // }
-void test_exit()
+
+int count_word(char *str)
 {
-	exit(77);
+    int i;
+    int count;
+
+    count = 0;
+    i = 0;
+    while (str[i])
+    {
+        while (str[i] == ' ')
+            i++;
+        if (str[i] !=  ' ' && str[i])
+        {
+            count++;
+            if (str[i] == 39)
+            {
+                i++;
+                while (str[i] && str[i] != 39)
+                    i++;
+                i++;
+            }
+            else
+            {
+                while(str[i] !=  ' ' && str[i])
+                    i++;
+            }
+        }
+    }
+    return (count);
 }
-int main(int argc, char const *argv[])
+// void test_exit()
+// {
+// 	exit(77);
+// }
+int main(int argc, char *argv[])
 {
-    int i = 0;
+    int i = count_word(argv[1]);
+    printf("%d\n", i);
     
     // char **str = singleQuoteHandle(argv[1]);
     // if (!str)
     //     return 99;
-	test_exit();
+	// test_exit();
     // ecxecv
     // while (str[i] != NULL)
     // {
