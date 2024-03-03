@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 12:24:49 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 12:59:26 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,10 +198,8 @@ int main(int argc, char const *argv[], char *envp[])
 				else if (pid > 0 && i >= argc - 2)
 				{
 					waitpid(pid, &status, 0);
-					if (WEXITSTATUS(status) != 0)
-					{
+					if (WEXITSTATUS(status) != 0 && i >= argc - 2)
 						exit(127);
-					}
 				}
 				close(fd[i - 2][1]);
 				i++;
