@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 13:32:41 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:16:43 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ int main(int argc, char const *argv[], char *envp[])
 					if (execve(path, command_args, envp) == -1)
 						exit_error(command_args[0], 127, i, argc, 'C');
 				}
-				else if (pid > 0 && i >= argc - 2)
+				else if (pid > 0)
 				{
 					waitpid(pid, &status, 0);
 					if (WEXITSTATUS(status) != 0 && i >= argc - 2)
@@ -209,6 +209,7 @@ int main(int argc, char const *argv[], char *envp[])
 		}
 		free2d(command_args);
 		free(path);
+		while (1);
 		// system("leaks a.out");
 	return (0);
 }
