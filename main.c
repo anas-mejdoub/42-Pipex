@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/03 18:53:11 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/04 20:53:42 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,14 +180,15 @@ char **optionSplit(char *str)
 }
 int main(int argc, char const *argv[], char *envp[])
 {
-		char *path;
-		int fd[argc - 3][2];
-		int fdin;
-		int fdout;
-		char **command_args;
-		int i;
-		int status;
-		
+		char	*path;
+		int		fd[argc - 3][2];
+		int		fdin;
+		int		0;
+		char	**command_args;
+		int		i;
+		int		status;
+		int		j;
+
 		i = 2;
 		command_args = NULL;
 		path = NULL;
@@ -199,7 +200,7 @@ int main(int argc, char const *argv[], char *envp[])
 				exit_error("FILE", 1, i, argc, 'P');
 			while (i < argc - 1)
 			{
-				int j = pipe(fd[i - 2]);
+				j = pipe(fd[i - 2]);
 				pid_t pid;
 				free2d(command_args);
 				free(path);
@@ -207,7 +208,7 @@ int main(int argc, char const *argv[], char *envp[])
 				path = find_path(command_args[0], get_env(envp));
 				pid = fork();
 				if (pid == -1 || j == -1)
-					perror("FORK");
+					perror("FORK ");
 				if (pid == 0)
 				{
 					if (i == 2)
