@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/05 20:46:07 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/06 13:19:03 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,9 @@ int count_word(char *str)
     return (count);
 }
 
-int find_char(char *str, char c)
+int find_char(char *str, char c, int i)
 {
-	int	i;
 
-	i = 0;
 	while (str[i])
 	{
 		if (str[i] == c)
@@ -82,7 +80,9 @@ char **singleQuoteHandle(char *str)
 	char	**res;
 	int		j;
     int temp;
+	int f;
 
+	f = 0;
 	i = 0;
     temp = 0;
 	j = 0;
@@ -93,18 +93,25 @@ char **singleQuoteHandle(char *str)
 	{
 		if (str[i] == 39)
 		{
-			res[j] = ft_strtrim(ft_substr(str, temp, ft_strlen(str)), "\'");
-			return (res[j + 1] = NULL, res);
+			res[j] = ft_strtrim(ft_substr(str, temp, find_char(str, '\'', i + 1) - i + 1), "\' ");
+			i = find_char(str, '\'', i + 1);
+            temp = i + 1;
+			j++;
+			f = 1;
 		}
 		else if (str[i] == ' ')
 		{
-			res[j] = ft_substr(str, temp, i - temp);
-            j++;
-            temp = i + 1;
+			if (!f)
+			{
+				res[j] = ft_substr(str, temp, i - temp);
+				j++;
+				temp = i + 1;
+			}
+			f = 0;
 		}
 		i++;
 	}
-	return (NULL);
+	return (res[j] = NULL, res);
 }
 
 int checker_(char *command)
@@ -178,12 +185,12 @@ char **optionSplit(char *str)
 		return (ft_split(str, ' '));
 	return (NULL);
 }
-int main(int argc, char const *argv[], char *envp[])
+int main(int argc, char  *argv[], char *envp[])
 {
 		char	*path;
 		int		fd[argc - 3][2];
 		int		fdin;
-		int		0;
+		int		fdout;
 		char	**command_args;
 		int		i;
 		int		status;
