@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/07 11:39:26 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/07 19:10:32 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,88 @@ char **optionSplit(char *str)
 		return (ft_split(str, ' '));
 	return (NULL);
 }
+void start_pipe(int fdin, int fd)
+{
+	dup2(fdin, STDIN_FILENO);
+	dup2(fd, STDOUT_FILENO);
+}
+void middle_pipe(int fd1, int fd2)
+{
+	dup2(fd1, STDIN_FILENO);
+	dup2(fd2, STDOUT_FILENO);
+}
+void last_pipe(int fdout, int fd1)
+{
+	dup2(fd1, STDIN_FILENO);
+	dup2(fdout, STDOUT_FILENO);
+}
+pid_t smart_fork()
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(-1);
+	}
+	else
+		return (pid);
+}
+int	smart_pipe(int fd[2])
+{
+	int	res;
+
+	res = pipe(fd);
+	if (res == -1)
+	{
+		perror("pipe");
+		exit(-1);
+	}
+	else
+		return (res);
+}
+void helper_function(int fdin, int fdout, int argc, char  *argv[], char *envp[])
+{
+	char	*path;
+	int		fd[argc - 3][2];
+	char	**command_args;
+	int		i;
+	int		status;
+	pid_t	pid;
+	
+	i = 2;
+	command_args = NULL;
+	path = NULL;
+	while (i < argc - 1)
+	{
+		smart_pipe(fd[i - 2]);
+		free2d(command_args);
+		free(path);
+		command_args = optionSplit((char *)argv[i]);
+		path = find_path(command_args[0], get_env(envp));
+		pid = smart_fork();
+		if (pid == 0)
+		{
+			if (i == 2)
+				start_pipe(fdin, fd[i - 2][1]);
+			else if (i < argc - 2)
+				middle_pipe(fd[i - 3][0], fd[i - 2][1]);
+			else
+				last_pipe(fdout, fd[i - 3][0]);
+			if (execve(path, command_args, envp) == -1)
+				exit_error(command_args[0], 127, i, argc, 'C');
+		}
+		else if (pid > 0)
+		{
+			waitpid(pid, &status, 0);
+			if (WEXITSTATUS(status) != 0 && i >= argc - 2)
+				exit_error(command_args[0], 127, i, argc, 'P');
+		}
+		close(fd[i - 2][1]);
+		i++;
+	}
+}
 int main(int argc, char  *argv[], char *envp[])
 {
 		char	*path;
@@ -227,6 +309,7 @@ int main(int argc, char  *argv[], char *envp[])
 		int		i;
 		int		status;
 		int		j;
+		pid_t	pid;
 
 		i = 2;
 		command_args = NULL;
@@ -237,46 +320,37 @@ int main(int argc, char  *argv[], char *envp[])
 			fdin = open(argv[1], O_RDWR);
 			if (fdout == -1 || fdin == -1)
 				exit_error("FILE", 1, i, argc, 'P');
-			while (i < argc - 1)
-			{
-				j = pipe(fd[i - 2]);
-				pid_t pid;
-				free2d(command_args);
-				free(path);
-				command_args = optionSplit((char *)argv[i]);
-				path = find_path(command_args[0], get_env(envp));
-				pid = fork();
-				if (pid == -1 || j == -1)
-					perror("FORK ");
-				if (pid == 0)
-				{
-					if (i == 2)
-					{
-						dup2(fdin, STDIN_FILENO);
-						dup2(fd[i - 2][1], STDOUT_FILENO);
-					}
-					else if (i < argc - 2)
-					{
-						dup2(fd[i - 3][0], STDIN_FILENO);
-						dup2(fd[i - 2][1], STDOUT_FILENO);
-					}
-					else
-					{
-						dup2(fd[i - 3][0], STDIN_FILENO);
-						dup2(fdout, STDOUT_FILENO);
-					}
-					if (execve(path, command_args, envp) == -1)
-						exit_error(command_args[0], 127, i, argc, 'C');
-				}
-				else if (pid > 0)
-				{
-					waitpid(pid, &status, 0);
-					if (WEXITSTATUS(status) != 0 && i >= argc - 2)
-						exit_error(command_args[0], 127, i, argc, 'P');
-				}
-				close(fd[i - 2][1]);
-				i++;
-			}
+			helper_function(fdin, fdout, argc, argv, envp);
+			// while (i < argc - 1)
+			// {
+			// 	j = pipe(fd[i - 2]);
+			// 	free2d(command_args);
+			// 	free(path);
+			// 	command_args = optionSplit((char *)argv[i]);
+			// 	path = find_path(command_args[0], get_env(envp));
+			// 	pid = fork();
+			// 	if (pid == -1 || j == -1)
+			// 		perror("FORK ");
+			// 	if (pid == 0)
+			// 	{
+			// 		if (i == 2)
+			// 			start_pipe(fdin, fd[i - 2][1], i);
+			// 		else if (i < argc - 2)
+			// 			middle_pipe(fd[i - 3][0], fd[i - 2][1]);
+			// 		else
+			// 			last_pipe(fdout, fd[i - 3][0]);
+			// 		if (execve(path, command_args, envp) == -1)
+			// 			exit_error(command_args[0], 127, i, argc, 'C');
+			// 	}
+			// 	else if (pid > 0)
+			// 	{
+			// 		waitpid(pid, &status, 0);
+			// 		if (WEXITSTATUS(status) != 0 && i >= argc - 2)
+			// 			exit_error(command_args[0], 127, i, argc, 'P');
+			// 	}
+			// 	close(fd[i - 2][1]);
+			// 	i++;
+			// }
 		}
 	return (0);
 }
