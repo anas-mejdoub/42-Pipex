@@ -4,37 +4,44 @@
 #include <unistd.h>
 #include "libft/libft.h"
 #include <errno.h>
+int find_char(char *str, char c, int i)
+{
 
-// char **singleQuoteHandle(char *str)
-// {
-// 	int		i;
-// 	char	**res;
-// 	int		j;
-//     int temp;
-	
-// 	i = 0;
-//     temp = 0;
-// 	j = 0;
-//     res = malloc(1000 * sizeof(char *));
-// 	while (str[i])
-// 	{
-// 		if (str[i] == 39)
-// 		{
-// 			res[j] = ft_strtrim(ft_substr(str, temp, ft_strlen(str)), "\'");   
-//             res[j + 1] = NULL;
-// 			return (res);
-// 		}
-// 		else if (str[i] == ' ')
-// 		{
-// 			res[j] = ft_substr(str, temp, i - temp);
-//             j++;
-//             temp = i + 1;
-// 		}
-// 		i++;
-// 	}
-// 	return (NULL);
-// }
+	while (str[i])
+	{
+		if (str[i] == c && str[i - 1] != 92)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+char	*ft_strtrim2(char *s1, char const *set)
+{
+	char	*res;
+	size_t	i;
+	size_t	y;
 
+	if (!s1 || !set)
+		return (free(s1), NULL);
+	y = ft_strlen(s1);
+	i = 0;
+	while (s1[i] && ft_strchr(set, s1[i]) != NULL)
+		i++;
+	while (y > 0 && ft_strchr(set, s1[y - 1]) != NULL)
+    {
+        if (s1[y - 1] == 39)
+        {
+            y--;
+            break;
+        }
+		--y;
+    }
+	if (i >= y)
+		return (free(s1), ft_strdup(""));
+	res = ft_substr(s1, i, y - i);
+	free(s1);
+	return (res);
+}
 int count_word(char *str)
 {
     int i;
@@ -53,7 +60,12 @@ int count_word(char *str)
             {
                 i++;
                 while (str[i] && str[i] != 39)
-                    i++;
+                {
+                    if (str[i] == 92 && str[i + 1] == 39)
+                        i+=2;
+					else
+						i++;
+                }
                 i++;
             }
             else
@@ -65,25 +77,71 @@ int count_word(char *str)
     }
     return (count);
 }
-// void test_exit()
+char **singleQuoteHandle(char *str)
+{
+	int		i;
+	char	**res;
+	int		j;
+    int temp;
+	int f;
+
+	f = 0;
+	i = 0;
+    temp = 0;
+	j = 0;
+    res = malloc((count_word(str) + 1) * sizeof(char *));
+	if (!res)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == 39 && str[i - 1] != 92)
+		{
+			res[j] = ft_strtrim2(ft_substr(str, temp, find_char(str, '\'', i + 1) - i + 1), "' ");
+			i = find_char(str, '\'', i + 1);
+            temp = i + 1;
+			j++;
+			f = 1;
+		}
+		else if (str[i] == ' ')
+		{
+			if (!f)
+			{
+				res[j] = ft_substr(str, temp, i - temp);
+				j++;
+				temp = i + 1;
+			}
+			f = 0;
+		}
+		i++;
+	}
+	return (res[j] = NULL, res);
+}
+// int containsSingleQ(char *str)
 // {
-// 	exit(77);
+// 	int	i;
+// 	int	count;
+
+// 	i = 0;
+// 	count = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == 39 && str[i - 1] != 92)
+// 			count++;
+// 		i++;
+// 	}
+// 	return (count);
 // }
+
 int main(int argc, char *argv[])
 {
-    int i = count_word(argv[1]);
-    printf("%d\n", i);
+
     
-    // char **str = singleQuoteHandle(argv[1]);
-    // if (!str)
-    //     return 99;
-	// test_exit();
-    // ecxecv
-    // while (str[i] != NULL)
-    // {
-    //     printf("%s\n", str[i]);
-    //     i++;
-    // }
-    // ft_printf("%s", ft_strtrim("'{printf $hf}'", "'"));
+    char **str = singleQuoteHandle(argv[1]);
+    int i = 0;
+    while (str[i] != NULL)
+    {
+        printf("%s\n", str[i]);
+        i++;
+    }
     return 0;
 }

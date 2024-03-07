@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/06 13:19:03 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:39:26 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,12 @@ int count_word(char *str)
             {
                 i++;
                 while (str[i] && str[i] != 39)
-                    i++;
+                {
+                    if (str[i] == 92 && str[i + 1] == 39)
+                        i+=2;
+					else
+						i++;
+                }
                 i++;
             }
             else
@@ -53,7 +58,7 @@ int find_char(char *str, char c, int i)
 
 	while (str[i])
 	{
-		if (str[i] == c)
+		if (str[i] == c && str[i - 1] != 92)
 			return (i);
 		i++;
 	}
@@ -68,11 +73,38 @@ int containsSingleQ(char *str)
 	count = 0;
 	while (str[i])
 	{
-		if (str[i] == 39)
+		if (str[i] == 39 && str[i - 1] != 92)
 			count++;
 		i++;
 	}
 	return (count);
+}
+char	*ft_strtrim2(char *s1, char const *set)
+{
+	char	*res;
+	size_t	i;
+	size_t	y;
+
+	if (!s1 || !set)
+		return (free(s1), NULL);
+	y = ft_strlen(s1);
+	i = 0;
+	while (s1[i] && ft_strchr(set, s1[i]) != NULL)
+		i++;
+	while (y > 0 && ft_strchr(set, s1[y - 1]) != NULL)
+    {
+        if (s1[y - 1] == 39)
+        {
+            y--;
+            break;
+        }
+		--y;
+    }
+	if (i >= y)
+		return (free(s1), ft_strdup(""));
+	res = ft_substr(s1, i, y - i);
+	free(s1);
+	return (res);
 }
 char **singleQuoteHandle(char *str)
 {
@@ -91,9 +123,9 @@ char **singleQuoteHandle(char *str)
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == 39)
+		if (str[i] == 39 && str[i - 1] != 92)
 		{
-			res[j] = ft_strtrim(ft_substr(str, temp, find_char(str, '\'', i + 1) - i + 1), "\' ");
+			res[j] = ft_strtrim2(ft_substr(str, temp, find_char(str, '\'', i + 1) - i + 1), "' ");
 			i = find_char(str, '\'', i + 1);
             temp = i + 1;
 			j++;
