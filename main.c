@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/07 19:10:32 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/08 19:54:26 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,7 @@ int	smart_pipe(int fd[2])
 	else
 		return (res);
 }
+
 void helper_function(int fdin, int fdout, int argc, char  *argv[], char *envp[])
 {
 	char	*path;
@@ -299,7 +300,7 @@ void helper_function(int fdin, int fdout, int argc, char  *argv[], char *envp[])
 		i++;
 	}
 }
-int main(int argc, char  *argv[], char *envp[])
+ int main(int argc, char  *argv[], char *envp[])
 {
 		char	*path;
 		int		fd[argc - 3][2];
