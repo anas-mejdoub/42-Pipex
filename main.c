@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/09 20:37:31 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/10 13:25:30 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ char **singleQuoteHandle(char *str)
 
 int checker_(char *command)
 {
-	return (command[0] == '/');
+	return (command[0] == '/' || command[0] == '.');
 }
 void free2d(char **res)
 {
@@ -193,10 +193,10 @@ char *find_path(char *command, char *envp)
 		}
 		return (NULL);
 }
-void	exit_error(char *str, int n, int i, int argc, char c)
+void	exit_error(char *str, int n)
 {
-	if ((i >= argc - 2 && c == 'P') || (i < argc - 2))
-		perror(str);
+	// if ((i >= argc - 2 && c == 'P') || (i < argc - 2))
+	perror(str);
 	exit(n);
 }
 char *get_env(char *envp[])
@@ -309,7 +309,8 @@ int	smart_pipe(int fd[2])
 int main(int argc, char  *argv[], char *envp[])
 {
 		char	*path;
-		int		fd[argc - 3][2];
+		int		fd[argc - 4][2];
+		int		pids[argc - 3];
 		int		fdin;
 		int		fdout;
 		char	**command_args;
@@ -326,16 +327,25 @@ int main(int argc, char  *argv[], char *envp[])
 			fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			fdin = open(argv[1], O_RDWR);
 			if (fdout == -1 || fdin == -1)
-				exit_error("FILE", 1, i, argc, 'P');
+				exit_error("FILE", 1);
+			i = 0;
+			while (i < argc - 4)
+			{
+				j = pipe(fd[i]);
+				if (j == -1)
+					exit_error("PIPE", 1);
+				i++;
+			}
+			i = 2;
 			// helper_function(fdin, fdout, argc, argv, envp);
 			while (i < argc - 1)
 			{
-				j = pipe(fd[i - 2]);
 				free2d(command_args);
 				free(path);
 				command_args = optionSplit((char *)argv[i]);
 				path = find_path(command_args[0], get_env(envp));
 				pid = fork();
+				
 				if (pid == -1 || j == -1)
 					perror("FORK ");
 				if (pid == 0)
@@ -343,27 +353,40 @@ int main(int argc, char  *argv[], char *envp[])
 					if (i == 2)
 						start_pipe(fdin, fd[i - 2][1]);
 					else if (i < argc - 2)
-					{
 						middle_pipe(fd[i - 3][0], fd[i - 2][1]);
-						close(fd[i - 3][0]);
-					}
 					else
-					{
 						last_pipe(fdout, fd[i - 3][0]);
-						close(fd[i - 3][0]);
+					int k = 0;
+					while (k < argc - 4)
+					{
+						close(fd[k][0]);
+						close(fd[k][1]);
+						k++;
 					}
 					if (execve(path, command_args, envp) == -1)
-						exit_error(command_args[0], 127, i, argc, 'C');
+						exit_error(command_args[0], 127);
 				}
-				close(fd[i - 2][1]);
+				else
+					pids[i - 2] = pid;
 				i++;
 			}
 			if (pid > 0)
 			{
-				waitpid(-1, &status, 0);
-				if (WEXITSTATUS(status) != 0 && i >= argc - 2)
-					exit_error(command_args[0], 127, i, argc, 'P');
+				i = 0;
+				while (i < argc - 4)
+				{
+					close(fd[i][0]);
+					close(fd[i][1]);
+					i++;
+				}
+				i = 0;
+				close(fdin);
+				while (i < argc - 3)
+				{
+					waitpid(pids[i], &status, 0);
+					i++;
+				}
 			}
 		}
-	return (0);
+	return (WEXITSTATUS(status));
 }
