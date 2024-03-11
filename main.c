@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/10 17:49:45 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/11 19:35:05 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char **singleQuoteHandle(char *str)
 
 int checker_(char *command)
 {
-	return (command[0] == '/' || command[0] == '.');
+	return (access(command, F_OK) == 0);
 }
 void free2d(char **res)
 {
@@ -190,7 +190,7 @@ char *find_path(char *command, char *envp)
 		paths = ft_split(envp, ':');
 		free(envp);
 		if (checker_(command))
-			return (command);
+			return (ft_strdup(command));
 		while (paths[i])
 		{
 			paths[i] = ft_strjoin2(paths[i], "/");
@@ -259,9 +259,6 @@ pid_t smart_fork()
 		return (pid);
 }
 
-
-
-
 void close_fd(int **fd, int n)
 {
 	int	i;
@@ -322,7 +319,7 @@ void pipes_level(int argc, int i, variables var ,commands_ command, char *envp[]
 		last_pipe(var.fdout, var.fd[i - 3][0]);
 	close_fd(var.fd, argc - 4);
 	if (execve(command.path, command.command_args, envp) == -1)
-				exit_error(command.command_args[0], 127);
+		exit_error(command.command_args[0], 127);
 }
 void parent_helper(variables var, int argc, int *status)
 {
@@ -369,7 +366,7 @@ int main(int argc, char  *argv[], char *envp[])
 {
 		int		status;
 		variables var;
-		
+
 		if (argc >= 4)
 		{
 			var.fd = malloc_2d(var.fd, argc - 4);
