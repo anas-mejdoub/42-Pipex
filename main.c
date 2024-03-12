@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/11 19:35:05 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/12 13:23:18 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,19 +232,10 @@ char **optionSplit(char *str)
 }
 void start_pipe(int fdin, int fd)
 {
-	dup2(fdin, STDIN_FILENO);
 	dup2(fd, STDOUT_FILENO);
+	dup2(fdin, STDIN_FILENO);
 }
-void middle_pipe(int fd1, int fd2)
-{
-	dup2(fd1, STDIN_FILENO);
-	dup2(fd2, STDOUT_FILENO);
-}
-void last_pipe(int fdout, int fd1)
-{
-	dup2(fd1, STDIN_FILENO);
-	dup2(fdout, STDOUT_FILENO);
-}
+
 pid_t smart_fork()
 {
 	pid_t pid;
@@ -314,9 +305,9 @@ void pipes_level(int argc, int i, variables var ,commands_ command, char *envp[]
 	if (i == 2)
 		start_pipe(var.fdin, var.fd[i - 2][1]);
 	else if (i < argc - 2)
-		middle_pipe(var.fd[i - 3][0], var.fd[i - 2][1]);
+		start_pipe(var.fd[i - 3][0], var.fd[i - 2][1]);
 	else
-		last_pipe(var.fdout, var.fd[i - 3][0]);
+		start_pipe(var.fd[i - 3][0], var.fdout);
 	close_fd(var.fd, argc - 4);
 	if (execve(command.path, command.command_args, envp) == -1)
 		exit_error(command.command_args[0], 127);
