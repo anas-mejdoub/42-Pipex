@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/14 17:15:08 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:50:43 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ typedef struct s_commands_variables
   	char	*path;
 	char	**command_args;
 } commands_;
+
+typedef struct s_varij
+{
+	int i;
+	int j;
+} varij;
+
 void mini_count_word(int *i, char *str)
 {
 	if (str[*i] == 39)
@@ -38,7 +45,7 @@ void mini_count_word(int *i, char *str)
             while (str[*i] && str[*i] != 39)
             {
                 if (str[*i] == 92 && str[*i + 1] == 39)
-                	(*i) += 2;
+					(*i) += 2;
 				else
 					(*i)++;
             }
@@ -123,44 +130,47 @@ char	*ft_strtrim2(char *s1, char const *set)
 	free(s1);
 	return (res);
 }
+void single_quote_helper(char *str, int *f, char **res, varij *var, int *temp)
+{
+	if (str[var->i] == 39 && str[var->j - 1] != 92)
+		{
+			res[var->j] = ft_strtrim2(ft_substr(str, *temp, find_char(str, '\'', var->i + 1) - var->i + 1), "' ");
+			var->i = find_char(str, '\'', var->i + 1);
+            *temp = var->i + 1;
+			var->j++;
+			*f = 1;
+		}
+		else if (str[var->i] == ' ')
+		{
+			if (!(*f))
+			{
+				res[var->j] = ft_substr(str, *temp, var->i - *temp);
+				var->j++;
+				*temp = var->i + 1;
+			}
+			*f = 0;
+		}
+}
 char **singleQuoteHandle(char *str)
 {
-	int		i;
 	char	**res;
-	int		j;
     int temp;
 	int f;
+	varij var;
 
 	f = 0;
-	i = 0;
+	var.i = 0;
     temp = 0;
-	j = 0;
+	var.j = 0;
     res = malloc((count_word(str) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
-	while (str[i])
+	while (str[var.i])
 	{
-		if (str[i] == 39 && str[i - 1] != 92)
-		{
-			res[j] = ft_strtrim2(ft_substr(str, temp, find_char(str, '\'', i + 1) - i + 1), "' ");
-			i = find_char(str, '\'', i + 1);
-            temp = i + 1;
-			j++;
-			f = 1;
-		}
-		else if (str[i] == ' ')
-		{
-			if (!f)
-			{
-				res[j] = ft_substr(str, temp, i - temp);
-				j++;
-				temp = i + 1;
-			}
-			f = 0;
-		}
-		i++;
+		single_quote_helper(str, &f, res, &var, &temp);
+		var.i++;
 	}
-	return (res[j] = NULL, res);
+	return (res[var.j] = NULL, res);
 }
 
 int checker_(char *command)
@@ -334,6 +344,7 @@ int helper_function(variables var, int argc, char  *argv[], char *envp[])
 	int		status;
 
 	i = 2;
+	status = 0;
 	command.command_args = NULL;
 	command.path = NULL;
 	while (i < argc - 1)
@@ -361,6 +372,7 @@ int main(int argc, char  *argv[], char *envp[])
 		int		status;
 		variables var;
 
+		status = 0;
 		if (argc >= 4)
 		{
 			var.fd = malloc_2d(var.fd, argc - 4);
