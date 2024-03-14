@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/14 17:05:03 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:15:08 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,21 @@ typedef struct s_commands_variables
   	char	*path;
 	char	**command_args;
 } commands_;
-
+void mini_count_word(int *i, char *str)
+{
+	if (str[*i] == 39)
+    {
+            (*i)++;
+            while (str[*i] && str[*i] != 39)
+            {
+                if (str[*i] == 92 && str[*i + 1] == 39)
+                	(*i) += 2;
+				else
+					(*i)++;
+            }
+            (*i)++;
+    }
+}
 int count_word(char *str)
 {
     int i;
@@ -41,23 +55,12 @@ int count_word(char *str)
     while (str[i])
     {
         while (str[i] == ' ')
-            i++;
+			i++;
         if (str[i] !=  ' ' && str[i])
         {
             count++;
-            if (str[i] == 39)
-            {
-                i++;
-                while (str[i] && str[i] != 39)
-                {
-                    if (str[i] == 92 && str[i + 1] == 39)
-                        i+=2;
-					else
-						i++;
-                }
-                i++;
-            }
-            else
+			mini_count_word(&i, str);
+            if (str[i] !=  39 && str[i])
             {
                 while(str[i] !=  ' ' && str[i])
                     i++;
