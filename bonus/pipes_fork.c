@@ -6,13 +6,14 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:18:33 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 15:21:14 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/17 21:08:40 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	pipes_level(int argc, variables var, commands_ command, char *envp[])
+void	pipes_level(int argc, t_variables var, t_commands_ command
+, char *envp[])
 {
 	int	j;
 

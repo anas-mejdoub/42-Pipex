@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:22:47 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 15:23:58 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/17 20:58:13 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,15 @@ void	free2d(char **res)
 int	checker_(char *command)
 {
 	return (access(command, F_OK) == 0);
+}
+
+int	find_char(char *str, char c, int i)
+{
+	while (str[i])
+	{
+		if (str[i] == c && str[i - 1] != 92)
+			return (i);
+		i++;
+	}
+	return (-1);
 }

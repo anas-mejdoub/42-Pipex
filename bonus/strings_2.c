@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:06:29 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 18:08:32 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/17 21:06:00 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ char	**single_quote_handle(char *str)
 	char	**res;
 	int		temp;
 	int		f;
-	varij	var;
+	t_varij	var;
 
-	f = 0;
+	var.f = 0;
 	var.i = 0;
 	temp = 0;
 	var.j = 0;
@@ -28,7 +28,7 @@ char	**single_quote_handle(char *str)
 		return (NULL);
 	while (str[var.i])
 	{
-		sing_quo_h(str, &f, res, &var, &temp);
+		sing_quo_h(str, res, &var, &temp);
 		var.i++;
 	}
 	return (res[var.j] = NULL, res);

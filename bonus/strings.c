@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:24:31 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 18:05:12 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/17 21:06:10 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,6 @@ int	count_word(char *str)
 	return (count);
 }
 
-int	find_char(char *str, char c, int i)
-{
-	while (str[i])
-	{
-		if (str[i] == c && str[i - 1] != 92)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
 int	contain_singleq(char *str)
 {
 	int	i;
@@ -108,24 +97,28 @@ char	*ft_strtrim2(char *s1, char const *set)
 	return (res);
 }
 
-void	sing_quo_h(char *str, int *f, char **res, varij *var, int *temp)
+void	sing_quo_h(char *str, char **res, t_varij *var, int *temp)
 {
+	int	subhelper;
+
+	subhelper = 0;
 	if (str[var->i] == 39 && str[var->j - 1] != 92)
 	{
-		res[var->j] = ft_strtrim2(ft_substr(str, *temp, find_char(str, '\'', var->i + 1) - var->i + 1), "' ");
+		subhelper = find_char(str, '\'', var->i + 1);
+		res[var->j] = ft_strtrim2(ft_substr(str, *temp, subhelper), "' ");
 		var->i = find_char(str, '\'', var->i + 1);
 		*temp = var->i + 1;
 		var->j++;
-		*f = 1;
+		var->f = 1;
 	}
 	else if (str[var->i] == ' ')
 	{
-		if (!(*f))
+		if (!(var->f))
 		{
 			res[var->j] = ft_substr(str, *temp, var->i - *temp);
 			var->j++;
 			*temp = var->i + 1;
 		}
-		*f = 0;
+		var->f = 0;
 	}
 }

@@ -135,7 +135,7 @@
 int main(int argc, char *argv[])
 {
 
-    
+    // printf("%s");
     // char **str = singleQuoteHandle(argv[1]);
     // int i = 0;
     // while (str[i] != NULL)
@@ -151,8 +151,8 @@ int main(int argc, char *argv[])
     // int fd = open("in", O_RDONLY);
     // char *str = get_next_line(0);
     // printf("%s", str);
-    int fd = open("/tmp/pipex.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
-    printf("%d\n", fd);
+    // int fd = open("/tmp/pipex.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
+    // printf("%d\n", fd);
     // char buffer[100];
     // int a = read(fd, buffer, 100);
     // printf("%s", buffer);
