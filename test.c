@@ -151,12 +151,13 @@ int main(int argc, char *argv[])
     // int fd = open("in", O_RDONLY);
     // char *str = get_next_line(0);
     // printf("%s", str);
-    int fd = open("pipex.txt", O_RDWR);
-    char buffer[100];
-    int a = read(fd, buffer, 100);
-    printf("%s", buffer);
-    a = write(fd, "Hello", 5);
-    printf("%d\n", a);
-	return(0);
+    int fd = open("/tmp/pipex.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
+    printf("%d\n", fd);
+    // char buffer[100];
+    // int a = read(fd, buffer, 100);
+    // printf("%s", buffer);
+    // a = write(fd, "Hello", 5);
+    // printf("%d\n", a);
+	// return(0);
     // return 0;
 }
