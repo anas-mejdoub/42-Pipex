@@ -6,80 +6,55 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/14 17:50:43 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/16 02:16:35 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include "libft/libft.h"
-#include <errno.h>
+#include "pipex.h"
 
-typedef struct s_variables
-{
-    int fdin;
-    int fdout;
-	int **fd;
-	int *pids;
-	pid_t pid;
-} variables;
-typedef struct s_commands_variables
-{
-  	char	*path;
-	char	**command_args;
-} commands_;
-
-typedef struct s_varij
-{
-	int i;
-	int j;
-} varij;
-
-void mini_count_word(int *i, char *str)
+void	mini_count_word(int *i, char *str)
 {
 	if (str[*i] == 39)
-    {
-            (*i)++;
-            while (str[*i] && str[*i] != 39)
-            {
-                if (str[*i] == 92 && str[*i + 1] == 39)
-					(*i) += 2;
-				else
-					(*i)++;
-            }
-            (*i)++;
-    }
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != 39)
+		{
+			if (str[*i] == 92 && str[*i + 1] == 39)
+				(*i) += 2;
+			else
+				(*i)++;
+		}
+		(*i)++;
+	}
 }
-int count_word(char *str)
-{
-    int i;
-    int count;
 
-    count = 0;
-    i = 0;
-    while (str[i])
-    {
-        while (str[i] == ' ')
+int	count_word(char *str)
+{
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 0;
+	while (str[i])
+	{
+		while (str[i] == ' ')
 			i++;
-        if (str[i] !=  ' ' && str[i])
-        {
-            count++;
+		if (str[i] != ' ' && str[i])
+		{
+			count++;
 			mini_count_word(&i, str);
-            if (str[i] !=  39 && str[i])
-            {
-                while(str[i] !=  ' ' && str[i])
-                    i++;
-            }
-        }
-    }
-    return (count);
+			if (str[i] != 39 && str[i])
+			{
+				while (str[i] != ' ' && str[i])
+					i++;
+			}
+		}
+	}
+	return (count);
 }
 
-int find_char(char *str, char c, int i)
+int	find_char(char *str, char c, int i)
 {
-
 	while (str[i])
 	{
 		if (str[i] == c && str[i - 1] != 92)
@@ -88,7 +63,8 @@ int find_char(char *str, char c, int i)
 	}
 	return (-1);
 }
-int containsSingleQ(char *str)
+
+int	contain_singleq(char *str)
 {
 	int	i;
 	int	count;
@@ -103,6 +79,7 @@ int containsSingleQ(char *str)
 	}
 	return (count);
 }
+
 char	*ft_strtrim2(char *s1, char const *set)
 {
 	char	*res;
@@ -116,68 +93,71 @@ char	*ft_strtrim2(char *s1, char const *set)
 	while (s1[i] && ft_strchr(set, s1[i]) != NULL)
 		i++;
 	while (y > 0 && ft_strchr(set, s1[y - 1]) != NULL)
-    {
-        if (s1[y - 1] == 39)
-        {
-            y--;
-            break;
-        }
+	{
+		if (s1[y - 1] == 39)
+		{
+			y--;
+			break ;
+		}
 		--y;
-    }
+	}
 	if (i >= y)
 		return (free(s1), ft_strdup(""));
 	res = ft_substr(s1, i, y - i);
 	free(s1);
 	return (res);
 }
-void single_quote_helper(char *str, int *f, char **res, varij *var, int *temp)
+
+void	sing_quo_h(char *str, int *f, char **res, varij *var, int *temp)
 {
 	if (str[var->i] == 39 && str[var->j - 1] != 92)
+	{
+		res[var->j] = ft_strtrim2(ft_substr(str, *temp, find_char(str, '\'', var->i + 1) - var->i + 1), "' ");
+		var->i = find_char(str, '\'', var->i + 1);
+		*temp = var->i + 1;
+		var->j++;
+		*f = 1;
+	}
+	else if (str[var->i] == ' ')
+	{
+		if (!(*f))
 		{
-			res[var->j] = ft_strtrim2(ft_substr(str, *temp, find_char(str, '\'', var->i + 1) - var->i + 1), "' ");
-			var->i = find_char(str, '\'', var->i + 1);
-            *temp = var->i + 1;
+			res[var->j] = ft_substr(str, *temp, var->i - *temp);
 			var->j++;
-			*f = 1;
+			*temp = var->i + 1;
 		}
-		else if (str[var->i] == ' ')
-		{
-			if (!(*f))
-			{
-				res[var->j] = ft_substr(str, *temp, var->i - *temp);
-				var->j++;
-				*temp = var->i + 1;
-			}
-			*f = 0;
-		}
+		*f = 0;
+	}
 }
-char **singleQuoteHandle(char *str)
+
+char	**single_quote_handle(char *str)
 {
 	char	**res;
-    int temp;
-	int f;
-	varij var;
+	int		temp;
+	int		f;
+	varij	var;
 
 	f = 0;
 	var.i = 0;
-    temp = 0;
+	temp = 0;
 	var.j = 0;
-    res = malloc((count_word(str) + 1) * sizeof(char *));
+	res = malloc((count_word(str) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	while (str[var.i])
 	{
-		single_quote_helper(str, &f, res, &var, &temp);
+		sing_quo_h(str, &f, res, &var, &temp);
 		var.i++;
 	}
 	return (res[var.j] = NULL, res);
 }
 
-int checker_(char *command)
+int	checker_(char *command)
 {
 	return (access(command, F_OK) == 0);
 }
-void free2d(char **res)
+
+void	free2d(char **res)
 {
 	int	i;
 
@@ -192,42 +172,45 @@ void free2d(char **res)
 		free(res);
 	}
 }
-char *find_path(char *command, char *envp)
-{
-		char	**paths;
-		int		i;
-		char	*res;
 
-		i = 0;
-		res = NULL;
-		paths = ft_split(envp, ':');
-		free(envp);
-		if (checker_(command))
-			return (ft_strdup(command));
-		while (paths[i])
-		{
-			paths[i] = ft_strjoin2(paths[i], "/");
-			i++;
-		}
-		i = 0;
-		while(paths[i] != NULL)
-		{
-			free(res);
-			res = ft_strjoin(paths[i], command);
-			if (access(res, F_OK) == 0)
-				return (free2d(paths), res);
-			i++;
-		}
-		return (NULL);
+char	*find_path(char *command, char *envp)
+{
+	char	**paths;
+	int		i;
+	char	*res;
+
+	i = 0;
+	res = NULL;
+	paths = ft_split(envp, ':');
+	free(envp);
+	if (checker_(command))
+		return (ft_strdup(command));
+	while (paths[i])
+	{
+		paths[i] = ft_strjoin2(paths[i], "/");
+		i++;
+	}
+	i = 0;
+	while (paths[i] != NULL)
+	{
+		free(res);
+		res = ft_strjoin(paths[i], command);
+		if (access(res, F_OK) == 0)
+			return (free2d(paths), res);
+		i++;
+	}
+	return (NULL);
 }
+
 void	exit_error(char *str, int n)
 {
 	perror(str);
 	exit(n);
 }
-char *get_env(char *envp[])
+
+char	*get_env(char *envp[])
 {
-	while(*envp != NULL)
+	while (*envp != NULL)
 	{
 		if (ft_strncmp(*envp, "PATH", 4) == 0)
 			return (ft_substr(*envp, 6, ft_strlen(*envp) - 6));
@@ -235,23 +218,25 @@ char *get_env(char *envp[])
 	}
 	return (NULL);
 }
-char **optionSplit(char *str)
+
+char	**option_split(char *str)
 {
-	if (containsSingleQ(str) > 1)
-		return (singleQuoteHandle(str));
+	if (contain_singleq(str) > 1)
+		return (single_quote_handle(str));
 	else
 		return (ft_split(str, ' '));
 	return (NULL);
 }
-void start_pipe(int fdin, int fd)
+
+void	start_pipe(int fdin, int fd)
 {
 	dup2(fd, STDOUT_FILENO);
 	dup2(fdin, STDIN_FILENO);
 }
 
-pid_t smart_fork()
+pid_t	smart_fork(void)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
@@ -263,10 +248,10 @@ pid_t smart_fork()
 		return (pid);
 }
 
-void close_fd(int **fd, int n)
+void	close_fd(int **fd, int n)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < n)
 	{
@@ -275,7 +260,8 @@ void close_fd(int **fd, int n)
 		i++;
 	}
 }
-int **malloc_2d(int **fd, int rows)
+
+int	**malloc_2d(int **fd, int rows)
 {
 	int	i;
 
@@ -292,14 +278,16 @@ int **malloc_2d(int **fd, int rows)
 	}
 	return (fd);
 }
-int *malloc_int_arr(int *fd, int n)
+
+int	*malloc_int_arr(int *fd, int n)
 {
 	fd = malloc(n * sizeof(int));
 	if (fd == NULL)
 		return (NULL);
 	return (fd);
 }
-void smart_pipe(int **fd, int n)
+
+void	smart_pipe(int **fd, int n)
 {
 	int	i;
 	int	j;
@@ -313,76 +301,127 @@ void smart_pipe(int **fd, int n)
 		i++;
 	}
 }
-void pipes_level(int argc, int i, variables var ,commands_ command, char *envp[])
+
+void	pipes_level(int argc, int i, variables var, commands_ command, char *envp[])
 {
-	if (i == 2)
-		start_pipe(var.fdin, var.fd[i - 2][1]);
-	else if (i < argc - 2)
-		start_pipe(var.fd[i - 3][0], var.fd[i - 2][1]);
+	int	j;
+
+	if (var.j == 3)
+		j = 5;
+	if (var.j == 2)
+		j = 4;
+	if (i == var.j)
+		start_pipe(var.fdin, var.fd[i - var.j][1]);
+	else if (i < argc - var.j)
+		start_pipe(var.fd[i - var.j - 1][0], var.fd[i - var.j][1]);
 	else
-		start_pipe(var.fd[i - 3][0], var.fdout);
-	close_fd(var.fd, argc - 4);
+		start_pipe(var.fd[i - var.j - 1][0], var.fdout);
+	close_fd(var.fd, argc - j);
 	if (execve(command.path, command.command_args, envp) == -1)
 		exit_error(command.command_args[0], 127);
 }
-void parent_helper(variables var, int argc, int *status)
+
+void	parent_helper(variables var, int argc, int *status)
 {
 	int	i;
 
-	close_fd(var.fd, argc - 4);
+	if (var.j == 3)
+		close_fd(var.fd, argc - 5);
+	else
+		close_fd(var.fd, argc - 4);
 	i = 0;
-	while (i < argc - 3)
+	while (i < argc - (var.j) + 1)
 	{
 		waitpid(var.pids[i], status, 0);
 		i++;
 	}
 }
-int helper_function(variables var, int argc, char  *argv[], char *envp[])
+
+void	mini_helper(int i, commands_ *command, variables *var, char *argv[], char *envp[])
 {
-	commands_ command;
-	int		i;
-	int		status;
+	free2d(command->command_args);
+	free(command->path);
+	command->command_args = option_split((char *)argv[i]);
+	command->path = find_path(command->command_args[0], get_env(envp));
+	var->pid = fork();
+	if (var->pid == -1)
+		perror("FORK ");
+}
+
+int	helper_function(variables var, int argc, char *argv[], char *envp[])
+{
+	commands_	command;
+	int			i;
+	int			status;
 
 	i = 2;
+	if (var.is_herdoc)
+		i = 3;
+	var.j = i;
 	status = 0;
 	command.command_args = NULL;
 	command.path = NULL;
 	while (i < argc - 1)
 	{
-		free2d(command.command_args);
-		free(command.path);
-		command.command_args = optionSplit((char *)argv[i]);
-		command.path = find_path(command.command_args[0], get_env(envp));
-		var.pid = fork();
-		if (var.pid == -1)
-			perror("FORK ");
+		mini_helper(i, &command, &var, argv, envp);
 		if (var.pid == 0)
 			pipes_level(argc, i, var, command, envp);
 		else
-			var.pids[i - 2] = var.pid;
+			var.pids[i - var.j] = var.pid;
 		i++;
 	}
 	if (var.pid > 0)
 		parent_helper(var, argc, &status);
-	return (status);
+	return (free2d(command.command_args), free(command.path), status);
 }
 
-int main(int argc, char  *argv[], char *envp[])
+void	here_doc_handler(variables *var, int argc, char **argv)
 {
-		int		status;
-		variables var;
+	char	*str;
 
-		status = 0;
-		if (argc >= 4)
+	var->j = 5;
+	var->is_herdoc = 1;
+	var->fdin = open("pipex.txt", O_RDWR | O_TRUNC | O_APPEND | O_CREAT, 0777);
+	var->fdout = open(argv[argc - 1], O_RDWR | O_APPEND | O_CREAT);
+	while (1)
+	{
+		str = get_next_line(0);
+		if (!ft_strncmp(argv[2], str, ft_strlen(argv[2])))
 		{
-			var.fd = malloc_2d(var.fd, argc - 4);
-			var.pids = malloc_int_arr(var.pids, argc - 3);
-			var.fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
-			var.fdin = open(argv[1], O_RDWR);
-			if (var.fdout == -1 || var.fdin == -1)
-				exit_error("FILE", 1);
-			smart_pipe(var.fd, argc - 4);
-			status = helper_function(var, argc, argv, envp);
+			close(var->fdin);
+			var->fdin = open("pipex.txt", O_RDWR | O_CREAT | O_APPEND, 0777);
+			free(str);
+			break ;
 		}
+		write(var->fdin, str, ft_strlen(str));
+		free(str);
+	}
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	int			status;
+	variables	var;
+
+	status = 0;
+	if (argc >= 4)
+	{
+		var.fd = malloc_2d(var.fd, argc - 4);
+		var.pids = malloc_int_arr(var.pids, argc - 3);
+		var.is_herdoc = 0;
+		var.j = 4;
+		if (!ft_strncmp(argv[1], "here_doc", 8))
+			here_doc_handler(&var, argc, argv);
+		else
+		{
+			var.fdin = open(argv[1], O_RDWR);
+			var.fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT);
+		}
+		if (var.fdout == -1 || var.fdin == -1)
+			exit_error("FILE", 1);
+		smart_pipe(var.fd, argc - var.j);
+		status = helper_function(var, argc, argv, envp);
+	}
+	unlink("pipex.txt");
 	return (WEXITSTATUS(status));
 }

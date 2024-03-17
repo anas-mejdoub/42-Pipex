@@ -7,7 +7,4 @@ drwxr-xr-x   5 amejdoub  candidates    170 Feb 28 18:16 .vscode
 -rwxr-xr-x   1 amejdoub  candidates  33164 Mar 12 15:48 a.out
 -rw-r--r--   1 amejdoub  candidates      0 Mar 12 15:49 in
 drwxr-xr-x  54 amejdoub  candidates   1836 Mar  3 16:02 libft
--rwxrwxrwx   1 amejdoub  candidates   6931 Mar 12 15:12 main.c
--rw-r--r--   1 amejdoub  candidates      1 Mar 12 15:49 out
--rw-r--r--   1 amejdoub  candidates   1137 Mar 12 13:27 pipex.h
--rw-r--r--   1 amejdoub  candidates   2965 Mar 11 19:28 test.c
+-rwxrwxr9:28 test.c

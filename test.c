@@ -143,11 +143,20 @@ int main(int argc, char *argv[])
     //     printf("%s\n", str[i]);
     //     i++;
     // }
-    char **str = ft_split("./test.sh" , ' ');
-    if (execve("./test.sh", str, NULL))
-    {
-        printf("Error: %s\n", strerror(errno));
-    }
+    // char **str = ft_split("./test.sh" , ' ');
+    // if (execve("./test.sh", str, NULL))
+    // {
+    //     printf("Error: %s\n", strerror(errno));
+    // }
+    // int fd = open("in", O_RDONLY);
+    // char *str = get_next_line(0);
+    // printf("%s", str);
+    int fd = open("pipex.txt", O_RDWR);
+    char buffer[100];
+    int a = read(fd, buffer, 100);
+    printf("%s", buffer);
+    a = write(fd, "Hello", 5);
+    printf("%d\n", a);
 	return(0);
     // return 0;
 }

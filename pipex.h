@@ -14,6 +14,8 @@ typedef struct s_variables
 	int **fd;
 	int *pids;
 	pid_t pid;
+	int is_herdoc;
+	int j;
 } variables;
 
 typedef struct s_commands_variables
@@ -21,9 +23,15 @@ typedef struct s_commands_variables
   	char	*path;
 	char	**command_args;
 } commands_;
+typedef struct s_varij
+{
+	int i;
+	int j;
+} varij;
+
 int count_word(char *str);
 int find_char(char *str, char c, int i);
-int containsSingleQ(char *str);
+int contain_singleq(char *str);
 char	*ft_strtrim2(char *s1, char const *set);
 char **singleQuoteHandle(char *str);
 int checker_(char *command);
@@ -41,4 +49,5 @@ void smart_pipe(int **fd, int n);
 void pipes_level(int argc, int i, variables var ,commands_ command, char *envp[]);
 void parent_helper(variables var, int argc, int *status);
 int helper_function(variables var, int argc, char  *argv[], char *envp[]);
+void	sing_quo_h(char *str, int *f, char **res, varij *var, int *temp);
 #endif

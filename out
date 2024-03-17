@@ -1,4 +1,7 @@
-total
-drwxr-xr-x
-drwxr-xr-x
-drwxr-xr-x
+a.out
+in
+libft
+main.c
+out
+pipex.h
+test.c
