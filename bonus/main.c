@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 21:25:08 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/18 17:19:29 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	parent_helper(t_variables var, int argc, int *status)
 	}
 }
 
-void	mini_helper(t_commands_ *command, t_variables *var, char *argv[]
-, char *envp[])
+void	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
+		char *envp[])
 {
 	free2d(command->command_args);
 	free(command->path);
@@ -77,7 +77,7 @@ void	here_doc_handler(t_variables *var, int argc, char **argv)
 	while (1)
 	{
 		str = get_next_line(0);
-		if (!ft_strncmp(argv[2], str, ft_strlen(argv[2])))
+		if (!ft_strncmp(argv[2], str, ft_strlen(str) - 1))
 		{
 			close(var->fdin);
 			var->fdin = open("/tmp/pipex.txt", O_RDWR | O_CREAT, 0777);

@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/18 17:04:49 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/18 17:07:05 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,29 +64,6 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	if (var.pid > 0)
 		parent_helper(var, argc, &status);
 	return (free2d(command.command_args), free(command.path), status);
-}
-
-void	here_doc_handler(t_variables *var, int argc, char **argv)
-{
-	char	*str;
-
-	var->j = 5;
-	var->is_herdoc = 1;
-	var->fdin = open("/tmp/pipex.txt", O_RDWR | O_TRUNC | O_CREAT, 0777);
-	var->fdout = open(argv[argc - 1], O_RDWR | O_CREAT | O_APPEND, 0777);
-	while (1)
-	{
-		str = get_next_line(0);
-		if (!ft_strncmp(argv[2], str, ft_strlen(argv[2])))
-		{
-			close(var->fdin);
-			var->fdin = open("/tmp/pipex.txt", O_RDWR | O_CREAT, 0777);
-			free(str);
-			break ;
-		}
-		write(var->fdin, str, ft_strlen(str));
-		free(str);
-	}
 }
 
 int	main(int argc, char *argv[], char *envp[])
