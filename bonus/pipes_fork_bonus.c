@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipes_fork.c                                       :+:      :+:    :+:   */
+/*   pipes_fork_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:18:33 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 21:08:40 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:41:17 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	pipes_level(int argc, t_variables var, t_commands_ command
 , char *envp[])

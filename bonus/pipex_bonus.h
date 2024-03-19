@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:30:52 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 21:54:13 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:42:56 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
+#ifndef PIPEX_BONUS_H
 
-# define PIPEX_H
+# define PIPEX_BONUS_H
 # include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>

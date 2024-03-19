@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strings_2.c                                        :+:      :+:    :+:   */
+/*   strings_2_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:06:29 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 21:06:00 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:41:42 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 char	**single_quote_handle(char *str)
 {
 	char	**res;
 	int		temp;
-	int		f;
 	t_varij	var;
 
 	var.f = 0;
