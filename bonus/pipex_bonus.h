@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:30:52 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 16:57:41 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 21:46:53 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,11 @@ int			contain_singleq(char *str);
 char		*ft_strtrim2(char *s1, char const *set);
 char		**single_quote_handle(char *str);
 int			checker_(char *command);
-void		free2d(char **res);
+void		free2d(void **res);
 char		*find_path(char *command, char *envp);
 void		exit_error(char *str, int n);
 char		*get_env(char *envp[]);
 void		start_pipe(int fdin, int fd);
-pid_t		smart_fork(void);
 void		close_fd(int **fd, int n);
 int			**malloc_2d(int **fd, int rows);
 int			*malloc_int_arr(int *fd, int n);

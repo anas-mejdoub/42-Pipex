@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:06:29 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/19 15:41:42 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 21:48:51 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*find_path(char *command, char *envp)
 		free(res);
 		res = ft_strjoin(paths[i], command);
 		if (access(res, F_OK) == 0)
-			return (free2d(paths), res);
+			return (free2d((void **)paths), res);
 		i++;
 	}
 	return (NULL);

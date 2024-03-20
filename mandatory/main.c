@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/18 17:07:05 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 20:38:14 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	parent_helper(t_variables var, int argc, int *status)
 void	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 		char *envp[])
 {
-	free2d(command->command_args);
+	free2d((void **)command->command_args);
 	free(command->path);
 	command->command_args = option_split((char *)argv[var->i]);
 	command->path = find_path(command->command_args[0], get_env(envp));
@@ -63,7 +63,7 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	}
 	if (var.pid > 0)
 		parent_helper(var, argc, &status);
-	return (free2d(command.command_args), free(command.path), status);
+	return (free2d((void **)command.command_args), free(command.path), status);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -81,11 +81,16 @@ int	main(int argc, char *argv[], char *envp[])
 		var.fdin = open(argv[1], O_RDWR);
 		var.fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0777);
 		if (var.fdout == -1 || var.fdin == -1)
+		{
 			exit_error("FILE", 1);
+			free2d((void **)var.fd);
+			free(var.pids);
+		}
 		smart_pipe(var.fd, argc - var.j);
 		status = helper_function(var, argc, argv, envp);
 	}
 	else
 		ft_printf("the number of argument is not valid !");
-	return (WEXITSTATUS(status));
+	free2d((void **)var.fd);
+	return (free(var.pids), WEXITSTATUS(status));
 }

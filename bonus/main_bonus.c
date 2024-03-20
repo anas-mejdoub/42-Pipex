@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/19 18:12:31 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 21:52:35 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	parent_helper(t_variables var, int argc, int *status)
 void	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 		char *envp[])
 {
-	free2d(command->command_args);
+	free2d((void **)command->command_args);
 	free(command->path);
 	command->command_args = option_split((char *)argv[var->i]);
 	command->path = find_path(command->command_args[0], get_env(envp));
@@ -63,7 +63,7 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	}
 	if (var.pid > 0)
 		parent_helper(var, argc, &status);
-	return (free2d(command.command_args), free(command.path), status);
+	return (free2d((void **)command.command_args), free(command.path), status);
 }
 
 void	here_doc_handler(t_variables *var, int argc, char **argv)
@@ -97,8 +97,6 @@ int	main(int argc, char *argv[], char *envp[])
 	status = 0;
 	if (argc > 4)
 	{
-		var.fd = malloc_2d(var.fd, argc - 4);
-		var.pids = malloc_int_arr(var.pids, argc - 3);
 		var.is_herdoc = 0;
 		var.j = 4;
 		if (!ft_strncmp(argv[1], "here_doc", 8))
@@ -107,11 +105,13 @@ int	main(int argc, char *argv[], char *envp[])
 			open_helper(&var, argv, argc);
 		if (var.fdout == -1 || var.fdin == -1)
 			exit_error("FILE", 1);
+		var.fd = malloc_2d(var.fd, argc - 4);
+		var.pids = malloc_int_arr(var.pids, argc - 3);
 		smart_pipe(var.fd, argc - var.j);
 		status = helper_function(var, argc, argv, envp);
 		unlink("/tmp/pipex.txt");
 	}
 	else
 		ft_printf("the number of argument is not valid !");
-	return (WEXITSTATUS(status));
+	return (free2d((void **)var.fd), free(var.pids), WEXITSTATUS(status));
 }

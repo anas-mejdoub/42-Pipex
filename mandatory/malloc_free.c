@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:22:47 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 20:58:13 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 20:30:34 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	*malloc_int_arr(int *fd, int n)
 	return (fd);
 }
 
-void	free2d(char **res)
+void	free2d(void **res)
 {
 	int	i;
 
