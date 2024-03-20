@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:18:33 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/17 21:08:40 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 16:58:24 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,6 @@ void	smart_pipe(int **fd, int n)
 			exit_error("PIPE", 1);
 		i++;
 	}
-}
-
-pid_t	smart_fork(void)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(-1);
-	}
-	else
-		return (pid);
 }
 
 void	start_pipe(int fdin, int fd)

@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/19 15:41:00 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/19 18:12:31 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,14 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!ft_strncmp(argv[1], "here_doc", 8))
 			here_doc_handler(&var, argc, argv);
 		else
-		{
-			var.fdin = open(argv[1], O_RDWR);
-			var.fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT);
-		}
+			open_helper(&var, argv, argc);
 		if (var.fdout == -1 || var.fdin == -1)
 			exit_error("FILE", 1);
 		smart_pipe(var.fd, argc - var.j);
 		status = helper_function(var, argc, argv, envp);
+		unlink("/tmp/pipex.txt");
 	}
-	unlink("pipex.txt");
+	else
+		ft_printf("the number of argument is not valid !");
 	return (WEXITSTATUS(status));
 }

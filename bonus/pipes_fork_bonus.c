@@ -6,14 +6,14 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:18:33 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/19 15:41:17 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/20 16:57:13 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	pipes_level(int argc, t_variables var, t_commands_ command
-, char *envp[])
+void	pipes_level(int argc, t_variables var, t_commands_ command,
+		char *envp[])
 {
 	int	j;
 
@@ -47,20 +47,6 @@ void	smart_pipe(int **fd, int n)
 	}
 }
 
-pid_t	smart_fork(void)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(-1);
-	}
-	else
-		return (pid);
-}
-
 void	start_pipe(int fdin, int fd)
 {
 	dup2(fd, STDOUT_FILENO);
@@ -78,4 +64,10 @@ void	close_fd(int **fd, int n)
 		close(fd[i][1]);
 		i++;
 	}
+}
+
+void	open_helper(t_variables *var, char **argv, int argc)
+{
+	var->fdin = open(argv[1], O_RDWR);
+	var->fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT);
 }
