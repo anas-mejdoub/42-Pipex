@@ -8,12 +8,15 @@ libft = ../libft
 all : $(NAME)
 
 $(NAME) : $(OBJBS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJBS)  ../libft/libft.a
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJBS)  ../libft/libft.a
 
 %.o : %.c pipex.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
-	rm -rf $(OBJBS)
+	@rm -rf $(OBJBS)
+
 fclean : clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
+
+re : fclean all
