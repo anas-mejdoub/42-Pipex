@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:18:33 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 16:57:13 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:56:23 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,5 @@ void	close_fd(int **fd, int n)
 void	open_helper(t_variables *var, char **argv, int argc)
 {
 	var->fdin = open(argv[1], O_RDWR);
-	var->fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT);
+	var->fdout = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0777);
 }

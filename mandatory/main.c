@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 22:20:39 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:34:29 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,5 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	else
 		ft_printf("the number of argument is not valid !");
-	free2d((void **)var.fd);
-	return (free(var.pids), WEXITSTATUS(status));
+	return (WEXITSTATUS(status));
 }

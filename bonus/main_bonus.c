@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 21:52:35 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:31:10 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 {
 	free2d((void **)command->command_args);
 	free(command->path);
+	command->command_args = NULL;
+	command->path = NULL;
 	command->command_args = option_split((char *)argv[var->i]);
 	command->path = find_path(command->command_args[0], get_env(envp));
 	var->pid = fork();
@@ -113,5 +115,5 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	else
 		ft_printf("the number of argument is not valid !");
-	return (free2d((void **)var.fd), free(var.pids), WEXITSTATUS(status));
+	return (WEXITSTATUS(status));
 }

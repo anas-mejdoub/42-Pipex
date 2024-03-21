@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:22:47 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 21:46:32 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:25:55 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,12 @@ void	free2d(void **res)
 		while (res[i])
 		{
 			free(res[i]);
+			res[i] = NULL;
 			i++;
 		}
 		free(res);
 	}
+	res = NULL;
 }
 
 int	checker_(char *command)
