@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 16:18:50 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 18:15:24 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	*path_helper(char **paths, char *command)
 			return (free2d((void **)paths), res);
 		i++;
 	}
+	free2d((void **)paths);
+	free(res);
 	return (NULL);
 }
 
@@ -53,11 +55,6 @@ int	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 	free(command->path);
 	command->command_args = option_split((char *)argv[var->i]);
 	command->path = find_path(command->command_args[0], get_env(envp));
-	if (!command->path)
-	{
-		perror("THE PATH VAR NOT FOUND !");
-		return (-1);
-	}
 	var->pid = fork();
 	if (var->pid == -1)
 	{
@@ -81,13 +78,16 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	command.path = NULL;
 	while (var.i < argc - 1)
 	{
-		if (mini_helper(&command, &var, argv, envp) == -1)
-			return (-1);
+		mini_helper(&command, &var, argv, envp);
 		if (var.pid == 0)
 			pipes_level(argc, var, command, envp);
 		else
 			var.pids[var.i - var.j] = var.pid;
 		var.i++;
+		free2d((void **)command.command_args);
+		free(command.path);
+		command.command_args = NULL;
+		command.path = NULL;
 	}
 	if (var.pid > 0)
 		parent_helper(var, argc, &status);
@@ -119,5 +119,6 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	else
 		ft_printf("the number of argument is not valid !");
+	system("leaks pipex");
 	return (WEXITSTATUS(status));
 }
