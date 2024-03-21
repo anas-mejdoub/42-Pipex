@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:21:02 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 16:30:05 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:08:47 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ char	*path_helper(char **paths, char *command)
 			return (free2d((void **)paths), res);
 		i++;
 	}
-	return (NULL);
+	return (free2d((void **)paths), free(res), NULL);
 }

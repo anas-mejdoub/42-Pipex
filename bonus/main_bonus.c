@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 15:54:39 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:10:31 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 	command->path = find_path(command->command_args[0], get_env(envp));
 	if (!command->path)
 	{
-		perror("THE PATH VAR NOT FOUND !");
+		ft_printf("ERROR WHILE SEARCHING FOR THE COMMAND PATH");
+		free2d((void **)command->command_args);
 		return (-1);
 	}
 	var->pid = fork();
