@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:30:52 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 21:46:53 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:22:23 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ void		parent_helper(t_variables var, int argc, int *status);
 int			helper_function(t_variables var, int argc, char *argv[],
 				char *envp[]);
 void		sing_quo_h(char *str, char **res, t_varij *var, int *temp);
+char		*path_helper(char **paths, char *command);
 void		open_helper(t_variables *var, char **argv, int argc);
 #endif

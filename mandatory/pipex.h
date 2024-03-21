@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:30:52 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 20:32:48 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:17:35 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_varij
 }			t_varij;
 
 char		**option_split(char *str);
+char		*path_helper(char **paths, char *command);
 int			count_word(char *str);
 void		mini_count_word(int *i, char *str);
 int			find_char(char *str, char c, int i);
@@ -58,7 +59,6 @@ char		*find_path(char *command, char *envp);
 void		exit_error(char *str, int n);
 char		*get_env(char *envp[]);
 void		start_pipe(int fdin, int fd);
-pid_t		smart_fork(void);
 void		close_fd(int **fd, int n);
 int			**malloc_2d(int **fd, int rows);
 int			*malloc_int_arr(int *fd, int n);

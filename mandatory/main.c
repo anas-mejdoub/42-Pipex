@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 15:34:29 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:18:50 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,43 @@ void	parent_helper(t_variables var, int argc, int *status)
 	}
 }
 
-void	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
+char	*path_helper(char **paths, char *command)
+{
+	int		i;
+	char	*res;
+
+	res = NULL;
+	i = 0;
+	while (paths[i] != NULL)
+	{
+		free(res);
+		res = ft_strjoin(paths[i], command);
+		if (access(res, F_OK) == 0)
+			return (free2d((void **)paths), res);
+		i++;
+	}
+	return (NULL);
+}
+
+int	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 		char *envp[])
 {
 	free2d((void **)command->command_args);
 	free(command->path);
 	command->command_args = option_split((char *)argv[var->i]);
 	command->path = find_path(command->command_args[0], get_env(envp));
+	if (!command->path)
+	{
+		perror("THE PATH VAR NOT FOUND !");
+		return (-1);
+	}
 	var->pid = fork();
 	if (var->pid == -1)
+	{
 		perror("FORK ");
+		return (-1);
+	}
+	return (1);
 }
 
 int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
@@ -54,7 +81,8 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	command.path = NULL;
 	while (var.i < argc - 1)
 	{
-		mini_helper(&command, &var, argv, envp);
+		if (mini_helper(&command, &var, argv, envp) == -1)
+			return (-1);
 		if (var.pid == 0)
 			pipes_level(argc, var, command, envp);
 		else
