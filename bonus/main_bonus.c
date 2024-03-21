@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 17:10:31 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:14:25 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	while (var.i < argc - 1)
 	{
 		if (mini_helper(&command, &var, argv, envp) == -1)
-			return (-1);
+			return (127);
 		if (var.pid == 0)
 			pipes_level(argc, var, command, envp);
 		else

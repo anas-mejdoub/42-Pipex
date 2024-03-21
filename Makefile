@@ -20,9 +20,11 @@ bonus : $(OBJBS_BONUS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
+	make clean -C ./libft
 	rm -rf $(OBJBS) $(OBJBS_BONUS)
 
 fclean : clean
+	make fclean -C ./libft
 	rm -rf $(NAME)
 
 re : fclean all
