@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 20:52:03 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 21:10:23 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	here_doc_handler(t_variables *var, int argc, char **argv)
 	var->fdout = open(argv[argc - 1], O_RDWR | O_CREAT | O_APPEND, 0777);
 	while (1)
 	{
-		ft_printf(">");
+		ft_printf("heredoc>");
 		str = get_next_line(0);
 		if (!ft_strncmp(argv[2], str, ft_strlen(str) - 1))
 		{
