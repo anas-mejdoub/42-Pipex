@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:18:33 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 18:14:38 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 20:34:51 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ void	pipes_level(int argc, t_variables var, t_commands_ command
 		start_pipe(var.fd[var.i - var.j - 1][0], var.fdout);
 	close_fd(var.fd, argc - j);
 	if (execve(command.path, command.command_args, envp) == -1)
-	{
 		exit_error(command.command_args[0], 127);
-	}
-	// execve(command.path, command.command_args, envp);
 }
 
 void	smart_pipe(int **fd, int n)

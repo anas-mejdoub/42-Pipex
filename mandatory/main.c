@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 18:15:24 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 20:39:12 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,6 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 		else
 			var.pids[var.i - var.j] = var.pid;
 		var.i++;
-		free2d((void **)command.command_args);
-		free(command.path);
-		command.command_args = NULL;
-		command.path = NULL;
 	}
 	if (var.pid > 0)
 		parent_helper(var, argc, &status);
@@ -119,6 +115,5 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	else
 		ft_printf("the number of argument is not valid !");
-	system("leaks pipex");
 	return (WEXITSTATUS(status));
 }

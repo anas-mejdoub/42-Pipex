@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:32:23 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 17:14:25 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/21 20:52:03 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,6 @@ int	mini_helper(t_commands_ *command, t_variables *var, char *argv[],
 	command->path = NULL;
 	command->command_args = option_split((char *)argv[var->i]);
 	command->path = find_path(command->command_args[0], get_env(envp));
-	if (!command->path)
-	{
-		ft_printf("ERROR WHILE SEARCHING FOR THE COMMAND PATH");
-		free2d((void **)command->command_args);
-		return (-1);
-	}
 	var->pid = fork();
 	if (var->pid == -1)
 	{
@@ -66,8 +60,7 @@ int	helper_function(t_variables var, int argc, char *argv[], char *envp[])
 	command.path = NULL;
 	while (var.i < argc - 1)
 	{
-		if (mini_helper(&command, &var, argv, envp) == -1)
-			return (127);
+		mini_helper(&command, &var, argv, envp);
 		if (var.pid == 0)
 			pipes_level(argc, var, command, envp);
 		else
@@ -89,6 +82,7 @@ void	here_doc_handler(t_variables *var, int argc, char **argv)
 	var->fdout = open(argv[argc - 1], O_RDWR | O_CREAT | O_APPEND, 0777);
 	while (1)
 	{
+		ft_printf(">");
 		str = get_next_line(0);
 		if (!ft_strncmp(argv[2], str, ft_strlen(str) - 1))
 		{
