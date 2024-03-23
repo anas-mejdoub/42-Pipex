@@ -1,5 +1,5 @@
 <h1>Pipex Project</h1>
-Description
+<h1>Description</h1>
 
 This project is part of the curriculum at 42 school and focuses on the concept of inter-process communication and file manipulation in Unix-like operating systems using pipelines.
 Table of Contents
