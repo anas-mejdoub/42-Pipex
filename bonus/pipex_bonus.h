@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:30:52 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/21 16:22:23 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/23 11:18:22 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 # define PIPEX_BONUS_H
 # include "../libft/libft.h"
-# include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
