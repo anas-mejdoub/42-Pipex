@@ -12,7 +12,7 @@ Table of Contents
     Contributing
     License
 
-Introduction
+<h1>Introduction</h1>
 
 Pipex is a project that involves creating a program that simulates the behavior of the shell command-line with redirections, pipes, and input/output files. It aims to deepen the understanding of how processes communicate and how file descriptors are manipulated in Unix systems.
 Requirements
@@ -23,7 +23,7 @@ To run Pipex, you will need:
     GCC compiler
     Make utility
 
-Installation
+<h1>Installation</h1>
 
 To install Pipex, follow these steps:
 
@@ -31,7 +31,7 @@ To install Pipex, follow these steps:
     Navigate to the project directory.
     Run the make command to compile the program.
 
-Usage
+<h1>Usage</h1>
 
 To use Pipex, follow these steps:
 
@@ -49,7 +49,7 @@ Here are some examples of how to use Pipex:
 Using a pipe between commands:
 
     ./pipex infile "grep a1" "sort" outfile
-Contributing
+<h1>Contributing</h1>
 
 Contributions to Pipex are welcome! If you find any bugs or have suggestions for improvements, please create a pull request or open an issue on GitHub.
 License
