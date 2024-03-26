@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:24:31 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/19 15:41:26 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/26 17:27:05 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	mini_count_word(int *i, char *str)
 {
-	if (str[*i] == 39)
+	if (str[*i] == 39 && str[*i + 1] != 39)
 	{
 		(*i)++;
 		while (str[*i] && str[*i] != 39)
@@ -39,6 +39,8 @@ int	count_word(char *str)
 	{
 		while (str[i] == ' ')
 			i++;
+		if (str[i] == 39 && str[i + 1] == 39)
+			i+=2;
 		if (str[i] != ' ' && str[i])
 		{
 			count++;
@@ -102,10 +104,12 @@ void	sing_quo_h(char *str, char **res, t_varij *var, int *temp)
 	int	subhelper;
 
 	subhelper = 0;
+	if (str[var->i] == 39 && str[var->i + 1] == 39)
+		var->i += 2;
 	if (str[var->i] == 39 && str[var->j - 1] != 92)
 	{
-		subhelper = find_char(str, '\'', var->i + 1);
-		res[var->j] = ft_strtrim2(ft_substr(str, *temp, subhelper), "' ");
+		subhelper = find_char(str, '\'', var->i);
+		res[var->j] = ft_strtrim(ft_substr(str, *temp, subhelper - var->i + 1), "' ");
 		var->i = find_char(str, '\'', var->i + 1);
 		*temp = var->i + 1;
 		var->j++;

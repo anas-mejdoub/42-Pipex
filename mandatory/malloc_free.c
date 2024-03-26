@@ -6,7 +6,7 @@
 /*   By: amejdoub <amejdoub@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 15:22:47 by amejdoub          #+#    #+#             */
-/*   Updated: 2024/03/20 20:30:34 by amejdoub         ###   ########.fr       */
+/*   Updated: 2024/03/26 17:27:33 by amejdoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	checker_(char *command)
 
 int	find_char(char *str, char c, int i)
 {
+	if (str[i] == 39)
+		i++;
 	while (str[i])
 	{
 		if (str[i] == c && str[i - 1] != 92)
