@@ -4,13 +4,13 @@
 This project is part of the curriculum at 42 school and focuses on the concept of inter-process communication and file manipulation in Unix-like operating systems using pipelines.
 Table of Contents
 
-    Introduction
-    Requirements
-    Installation
-    Usage
-    Examples
-    Contributing
-    License
+<h2>#Introduction</h2>
+<h2>#Requirements</h2>
+<h2>#Installation</h2>
+<h2>$Usage</h2>
+<h2>#Examples</h2>
+<h2>#Contributing</h2>
+<h2>#License</h2>
 
 <h1>Introduction</h1>
 
