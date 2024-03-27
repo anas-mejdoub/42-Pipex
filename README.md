@@ -19,32 +19,34 @@ Requirements
 
 To run Pipex, you will need:
 
-1-A Unix-like operating system (e.g., Linux, macOS)
-2-GCC compiler
-3-Make utility
+1-A Unix-like operating system (e.g., Linux, macOS)</br>
+2-GCC compiler</br>
+3-Make utility</br>
 
 <h1>Installation</h1>
 
 To install Pipex, follow these steps:
 
-1-Clone this repository to your local machine.
-2-Navigate to the project directory.
-3-Run the make command to compile the program.
+1-Clone this repository to your local machine.</br>
+2-Navigate to the project directory.</br>
+3-Run the make command to compile the program.</br>
 
 <h1>Usage</h1>
 
 To use Pipex, follow these steps:
 
-1-Open a terminal window.
-2-Navigate to the directory where Pipex is installed.
-3-Run the program with the desired arguments and input/output files.
+1-Open a terminal window.</br>
+2-Navigate to the directory where Pipex is installed.</br>
+3-Run the program with the desired arguments and input/output files.</br>
+
     ./pipex file1 cmd1 cmd2 file2
 Replace file1, cmd1, cmd2, and file2 with your specific inputs.
 <h1>Examples</h1>
 
 Here are some examples of how to use Pipex:
 
-Redirecting input from a file and output to another file:
+Redirecting input from a file and output to another file:</br>
+
     ./pipex infile "ls -l" "wc -l" outfile
 Using a pipe between commands:
 
