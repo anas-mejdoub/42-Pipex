@@ -7,7 +7,7 @@ Table of Contents
 <h3>#Introduction</h3>
 <h3>#Requirements</h3>
 <h3>#Installation</h3>
-<h3>$Usage</h3>
+<h3>#Usage</h3>
 <h3>#Examples</h3>
 <h3>#Contributing</h3>
 <h3>#License</h3>
